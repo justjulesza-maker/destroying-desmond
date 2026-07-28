@@ -90,6 +90,8 @@ exports.handler = async event => {
         toName: order.giftTo || '', message: order.giftMsg || '',
         amount: Number(d.amount_gross), ref, claimedBy: null, claimedAt: null, createdAt: now
       });
+      // private pointer so the buyer can see their own code without reading dd_gifts
+      await dbPatch(`dd_my_gifts/${uid}`, { [code]: now });
     } else {
       await dbPut(`flieks_purchases/${uid}/${filmId}`, {
         filmId, uid, type: tier, status: 'paid',
