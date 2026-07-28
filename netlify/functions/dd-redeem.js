@@ -49,12 +49,29 @@ exports.handler = async event => {
     const key  = String(code).trim().toUpperCase();
     const gift = await dbGet(`dd_gifts/${encodeURIComponent(key)}`);
 
-    if (!gift)                       return fail(404, 'No gift with that code.');
-    if (gift.claimedBy === user.localId) return fail(409, 'You already unlocked this one.');
-    if (gift.claimedBy)              return fail(409, 'That code has already been used.');
+    if (!gift) return fail(404, 'No gift with that code.');
+
+    const now = Date.now();
+
+    // Optional expiry — set expiresAt (ms since epoch) on the gift record.
+    if (gift.expiresAt && now > gift.expiresAt) {
+      return fail(410, 'That code has expired.');
+    }
+
+    if (gift.multiUse) {
+      // Shared internal code: many people, one code. Still one grant per account.
+      if (gift.claims && gift.claims[user.localId]) {
+        return fail(409, 'You already unlocked this one.');
+      }
+      if (gift.maxUses && Object.keys(gift.claims || {}).length >= gift.maxUses) {
+        return fail(409, 'That code has reached its limit.');
+      }
+    } else {
+      if (gift.claimedBy === user.localId) return fail(409, 'You already unlocked this one.');
+      if (gift.claimedBy)                  return fail(409, 'That code has already been used.');
+    }
 
     const filmId = gift.filmId || 'destroying-desmond';
-    const now = Date.now();
 
     await dbWrite(`flieks_purchases/${user.localId}/${filmId}`, {
       filmId, uid: user.localId, type: 'own', status: 'paid',
@@ -62,9 +79,14 @@ exports.handler = async event => {
       ref: gift.ref || null, expiresAt: null, purchasedAt: now
     }, 'PUT');
 
-    await dbWrite(`dd_gifts/${encodeURIComponent(key)}`, {
-      claimedBy: user.localId, claimedEmail: user.email || '', claimedAt: now
-    }, 'PATCH');
+    if (gift.multiUse) {
+      await dbWrite(`dd_gifts/${encodeURIComponent(key)}/claims/${user.localId}`,
+        { email: user.email || '', at: now }, 'PUT');
+    } else {
+      await dbWrite(`dd_gifts/${encodeURIComponent(key)}`, {
+        claimedBy: user.localId, claimedEmail: user.email || '', claimedAt: now
+      }, 'PATCH');
+    }
 
     return {
       statusCode: 200, headers: { 'Content-Type': 'application/json' },
