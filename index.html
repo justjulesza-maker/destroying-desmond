@@ -187,8 +187,8 @@ section{padding:64px 0;position:relative}
 .play-over:hover .disc{transform:scale(1.09)}
 .play-over svg{width:26px;height:26px;fill:#fff;margin-left:4px}
 
-.poster-wrap{display:none;position:relative}
-@media(min-width:940px){.poster-wrap{display:block}}
+.poster-wrap{position:relative;margin:38px auto 4px;max-width:290px}
+@media(min-width:940px){.poster-wrap{margin:0;max-width:none}}
 .poster-wrap img{width:100%;border-radius:2px}
 .poster-frame{padding:10px 10px 46px;background:#fff;box-shadow:var(--lift);transform:rotate(1.6deg)}
 .poster-frame .cap{
@@ -512,8 +512,9 @@ footer{border-top:2px solid var(--torn);padding:34px 0 96px;margin-top:26px}
 
     <div class="poster-wrap">
       <div class="poster-frame">
+        <span class="tape tl"></span>
         <img id="posterImg" alt="Destroying Desmond poster" loading="lazy">
-        <span class="cap">on now</span>
+        <span class="cap">out now</span>
       </div>
     </div>
   </div>
