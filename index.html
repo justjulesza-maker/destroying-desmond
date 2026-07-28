@@ -76,14 +76,14 @@ section{padding:56px 0}
 /* ---- buttons ---- */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:9px;
-  padding:14px 22px;border:1px solid var(--line-2);background:transparent;
+  padding:14px 22px;min-height:48px;border:1px solid var(--line-2);background:transparent;
   font-family:var(--fd);font-size:var(--t-sm);letter-spacing:.14em;text-transform:uppercase;
   cursor:pointer;border-radius:2px;transition:background .2s,color .2s,border-color .2s;
 }
 .btn:hover{border-color:var(--bone)}
 .btn-fill{background:var(--sodium);border-color:var(--sodium);color:var(--pitch)}
 .btn-fill:hover{background:#FFBF50;border-color:#FFBF50}
-.btn-sm{padding:9px 14px;font-size:var(--t-xs)}
+.btn-sm{padding:11px 16px;font-size:var(--t-xs);min-height:44px}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .btn-ghost{border-color:var(--line)}
 
@@ -163,7 +163,7 @@ h1 .l2{display:block;color:var(--sodium)}
 .act-reach{font-size:var(--t-xs);color:var(--haze);margin-top:4px;letter-spacing:.06em}
 .socials{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .soc{
-  display:inline-flex;align-items:center;gap:6px;padding:6px 11px;
+  display:inline-flex;align-items:center;gap:6px;padding:10px 15px;min-height:40px;
   border:1px solid var(--line);border-radius:100px;
   font-size:var(--t-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--haze);
   transition:border-color .2s,color .2s
@@ -185,8 +185,8 @@ h1 .l2{display:block;color:var(--sodium)}
 .rev-who{font-family:var(--fd);font-size:var(--t-sm);letter-spacing:.1em;text-transform:uppercase}
 .rev-when{margin-left:auto;font-size:var(--t-xs);color:var(--haze)}
 .rev p{font-size:var(--t-sm);line-height:1.55}
-.rate-pick{display:inline-flex;gap:5px}
-.rate-pick button{background:none;border:0;cursor:pointer;padding:2px}
+.rate-pick{display:inline-flex;gap:2px;margin:-8px 0}
+.rate-pick button{background:none;border:0;cursor:pointer;padding:8px 6px;min-height:44px}
 .rate-pick svg{width:26px;height:26px;fill:var(--slab-2);transition:fill .15s}
 .rate-pick button.on svg{fill:var(--sodium)}
 
@@ -219,7 +219,7 @@ h1 .l2{display:block;color:var(--sodium)}
 .field label{font-size:var(--t-xs);letter-spacing:.16em;text-transform:uppercase;color:var(--haze)}
 .field input,.field textarea,.field select{
   background:var(--pitch);border:1px solid var(--line);border-radius:2px;
-  padding:12px 13px;font-size:var(--t-md);font-weight:300;width:100%
+  padding:13px;font-size:16px;font-weight:300;width:100%
 }
 .field input:focus,.field textarea:focus{border-color:var(--sodium);outline:none}
 .row{display:grid;gap:14px}
@@ -261,13 +261,13 @@ footer{border-top:1px solid var(--line);padding:36px 0 96px;margin-top:20px}
 .scrim.open{opacity:1;pointer-events:auto}
 .modal{
   background:var(--ink);border:1px solid var(--line-2);border-radius:4px;
-  width:100%;max-width:440px;max-height:88vh;overflow:auto;padding:28px
+  width:100%;max-width:440px;max-height:88dvh;overflow:auto;overscroll-behavior:contain;padding:28px
 }
 .modal.wide{max-width:960px;padding:0;background:var(--pitch);border-radius:4px;overflow:hidden}
 .modal h3{font-family:var(--fd);font-size:var(--t-xl);text-transform:uppercase;letter-spacing:.03em;font-weight:400;margin-bottom:6px}
-.modal .x{position:absolute;top:14px;right:16px;z-index:5;background:rgba(13,10,19,.7);border:1px solid var(--line);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:18px;line-height:1}
+.modal .x{position:absolute;top:12px;right:12px;z-index:5;background:rgba(13,10,19,.8);border:1px solid var(--line);border-radius:50%;width:44px;height:44px;cursor:pointer;font-size:20px;line-height:1}
 .tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin:16px 0 20px}
-.tabs button{flex:1;background:none;border:0;border-bottom:2px solid transparent;padding:11px 0;cursor:pointer;font-family:var(--fd);font-size:var(--t-sm);letter-spacing:.14em;text-transform:uppercase;color:var(--haze)}
+.tabs button{flex:1;background:none;border:0;border-bottom:2px solid transparent;padding:15px 0;min-height:48px;cursor:pointer;font-family:var(--fd);font-size:var(--t-sm);letter-spacing:.14em;text-transform:uppercase;color:var(--haze)}
 .tabs button.on{color:var(--bone);border-bottom-color:var(--sodium)}
 .note{font-size:var(--t-xs);color:var(--haze);margin-top:12px;line-height:1.5}
 .err{color:#FF7A6E;font-size:var(--t-sm);margin-top:10px;min-height:1.2em}
@@ -286,6 +286,45 @@ footer{border-top:1px solid var(--line);padding:36px 0 96px;margin-top:20px}
 @keyframes sh{to{background-position:-200% 0}}
 .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .reveal.in{opacity:1;transform:none}
+
+/* ---- phones ---- */
+@media(max-width:700px){
+  :root{--gut:18px}
+  section{padding:44px 0}
+  .hero{padding:22px 0 4px}
+  h1{font-size:clamp(46px,13vw,72px);overflow-wrap:anywhere}
+  .logline{font-size:16px}
+  .sec-head{gap:10px;margin-bottom:22px}
+  .sec-head h2{font-size:28px}
+  .sec-head .count{width:100%;margin-left:0;order:3}
+
+  /* tiers: trim the height so all three are reachable without a marathon scroll */
+  .tier{padding:20px}
+  .tier .price{font-size:34px;margin:10px 0 2px}
+  .tier ul{margin:12px 0 18px;gap:7px}
+  .tier li{font-size:13px}
+
+  .act{padding:18px 0;gap:14px}
+  .act-link{margin-top:14px}
+  .act-link .btn{width:100%}
+
+  .rev-top{flex-wrap:wrap;gap:7px}
+  .rev-when{margin-left:0;width:100%}
+
+  .modal{padding:22px 18px}
+  .modal.wide{max-width:100%}
+  .code-out{font-size:20px;letter-spacing:.16em;padding:14px}
+  .panel{padding:20px}
+  .foot{font-size:10px;gap:12px}
+  .foot .pb{margin-left:0;width:100%}
+}
+
+/* the on-screen keyboard leaves very little room in landscape */
+@media(max-height:520px) and (orientation:landscape){
+  .modal{max-height:94dvh;padding:18px}
+  .buybar{display:none}
+}
+
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01ms !important;transition-duration:.01ms !important}
   html{scroll-behavior:auto}
@@ -314,7 +353,7 @@ footer{border-top:1px solid var(--line);padding:36px 0 96px;margin-top:20px}
 <!-- ===================== HERO ===================== -->
 <header class="hero" id="top">
   <div class="wrap hero-grid">
-    <div class="poster"><img id="posterImg" alt="Destroying Desmond poster"></div>
+    <div class="poster"><img id="posterImg" alt="Destroying Desmond poster" loading="lazy"></div>
     <div>
       <div class="player-well">
         <span class="trailer-badge">Trailer · free</span>
@@ -908,6 +947,7 @@ $('#redeemBtn').onclick = async () => {
   const snap = await db.ref(`dd_my_gifts/${u.uid}`).get().catch(() => null);
   const v = snap && snap.val();
   if (v) {
+    // newest code first
     const code = Object.entries(v).sort((a, b) => b[1] - a[1])[0][0];
     $('#codeOut').textContent = code;
     $('#codeShare').onclick = () => {
