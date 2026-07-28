@@ -1,0 +1,44 @@
+{
+  "COMMENT": "Merge these keys into your existing flieks rules object. Do not replace the whole file.",
+
+  "dd_config":  { ".read": true,  ".write": false },
+  "dd_cast":    { ".read": true,  ".write": false },
+
+  "dd_private": { ".read": false, ".write": false },
+  "dd_orders":  { ".read": false, ".write": false },
+
+  "dd_gifts": {
+    ".read": "auth != null",
+    ".write": false,
+    ".indexOn": ["buyerUid", "claimedBy"]
+  },
+
+  "dd_reviews": {
+    ".read": true,
+    ".indexOn": ["approved", "createdAt"],
+    "$rid": {
+      ".write": "auth != null && (!data.exists() || data.child('uid').val() === auth.uid)",
+      ".validate": "newData.hasChildren(['uid','rating','body','approved','createdAt'])",
+      "uid":      { ".validate": "newData.val() === auth.uid" },
+      "rating":   { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 5" },
+      "body":     { ".validate": "newData.isString() && newData.val().length >= 10 && newData.val().length <= 600" },
+      "approved": { ".validate": "newData.val() === false" },
+      "name":     { ".validate": "newData.isString() && newData.val().length <= 60" },
+      "ref":      { ".validate": "newData.isString() || newData.val() === null" },
+      "createdAt":{ ".validate": "newData.val() === now" },
+      "$other":   { ".validate": false }
+    }
+  },
+
+  "dd_stats": {
+    ".read": "auth != null",
+    "trailerPlays": { ".write": true, ".validate": "newData.isNumber()" },
+    "plays":        { ".write": true, ".validate": "newData.isNumber()" },
+    "refs": {
+      "$slug": {
+        "clicks":       { ".write": true, ".validate": "newData.isNumber()" },
+        "trailerPlays": { ".write": true, ".validate": "newData.isNumber()" }
+      }
+    }
+  }
+}

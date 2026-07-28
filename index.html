@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Destroying Desmond — a short film</title>
+<meta name="description" content="A South African short film. Watch the trailer free. Stream it, own it, or send it to a friend.">
+<meta property="og:title" content="Destroying Desmond">
+<meta property="og:description" content="A short film. Watch the trailer free.">
+<meta property="og:type" content="video.movie">
+<meta name="theme-color" content="#17131F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESTROYING DESMOND — white-label film page, powered by 4flieks
+   Palette: sodium-vapour night. Ink aubergine, amber, bone.
+   Display: Anton (billing-block condensed). Body: Sora.
+   ============================================================ */
+:root{
+  --ink:#17131F; --pitch:#0D0A13; --slab:#231C30; --slab-2:#2C2440;
+  --sodium:#F0A82E; --sodium-dim:#8a5f16;
+  --bone:#EDE7DB; --haze:#9A90AD;
+  --line:rgba(237,231,219,.13); --line-2:rgba(237,231,219,.28);
+  --fd:'Anton',Impact,sans-serif;
+  --fb:'Sora',system-ui,-apple-system,sans-serif;
+  --t-xs:11px; --t-sm:13px; --t-md:15px; --t-lg:18px; --t-xl:24px; --t-2xl:36px;
+  --gut:20px; --max:1120px;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--ink); color:var(--bone); font-family:var(--fb);
+  font-size:var(--t-md); font-weight:300; line-height:1.6;
+  overflow-x:hidden; padding-bottom:env(safe-area-inset-bottom);
+}
+img,video{max-width:100%;display:block}
+button,input,textarea,select{font:inherit;color:inherit}
+a{color:var(--bone);text-decoration:none}
+:focus-visible{outline:2px solid var(--sodium);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
+.hide{display:none !important}
+
+/* ---- structural type ---- */
+.eyebrow{
+  font-family:var(--fd); font-size:var(--t-xs); letter-spacing:.22em;
+  text-transform:uppercase; color:var(--sodium);
+}
+.sec-head{
+  display:flex;align-items:baseline;gap:14px;
+  padding-bottom:14px;margin-bottom:28px;border-bottom:1px solid var(--line);
+}
+.sec-head h2{font-family:var(--fd);font-size:var(--t-2xl);letter-spacing:.01em;line-height:1;font-weight:400}
+.sec-head .count{margin-left:auto;font-size:var(--t-xs);color:var(--haze);letter-spacing:.16em;text-transform:uppercase}
+section{padding:56px 0}
+.muted{color:var(--haze)}
+
+/* ---- nav ---- */
+.nav{
+  position:sticky;top:0;z-index:60;
+  background:rgba(23,19,31,.82);backdrop-filter:blur(14px);
+  border-bottom:1px solid transparent;transition:border-color .3s
+}
+.nav.stuck{border-bottom-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:16px;height:56px}
+.nav .mark{font-family:var(--fd);font-size:var(--t-sm);letter-spacing:.14em;text-transform:uppercase}
+.nav .mark span{color:var(--sodium)}
+.nav .links{display:none;gap:22px;margin-left:auto}
+.nav .links a{font-size:var(--t-xs);letter-spacing:.16em;text-transform:uppercase;color:var(--haze);transition:color .2s}
+.nav .links a:hover{color:var(--bone)}
+.nav .acct{margin-left:auto}
+@media(min-width:860px){.nav .links{display:flex}.nav .acct{margin-left:0}}
+
+/* ---- buttons ---- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:14px 22px;border:1px solid var(--line-2);background:transparent;
+  font-family:var(--fd);font-size:var(--t-sm);letter-spacing:.14em;text-transform:uppercase;
+  cursor:pointer;border-radius:2px;transition:background .2s,color .2s,border-color .2s;
+}
+.btn:hover{border-color:var(--bone)}
+.btn-fill{background:var(--sodium);border-color:var(--sodium);color:var(--pitch)}
+.btn-fill:hover{background:#FFBF50;border-color:#FFBF50}
+.btn-sm{padding:9px 14px;font-size:var(--t-xs)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-ghost{border-color:var(--line)}
+
+/* ---- hero ---- */
+.hero{padding:36px 0 8px}
+.hero-grid{display:grid;gap:26px}
+@media(min-width:900px){
+  .hero{padding:56px 0 20px}
+  .hero-grid{grid-template-columns:300px 1fr;gap:44px;align-items:start}
+}
+.poster{
+  aspect-ratio:9/16;background:var(--pitch);border:1px solid var(--line);
+  border-radius:3px;overflow:hidden;position:relative;display:none;
+}
+.poster img{width:100%;height:100%;object-fit:cover}
+@media(min-width:900px){.poster{display:block}}
+
+.player-well{
+  position:relative;background:var(--pitch);border:1px solid var(--line);
+  border-radius:3px;overflow:hidden;aspect-ratio:16/9;
+}
+.player-well video,.player-well iframe{width:100%;height:100%;object-fit:cover;border:0}
+.trailer-badge{
+  position:absolute;top:12px;left:12px;z-index:3;
+  background:rgba(13,10,19,.78);border:1px solid var(--line-2);border-radius:2px;
+  padding:5px 10px;font-family:var(--fd);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+}
+.play-over{
+  position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(to top,rgba(13,10,19,.7),rgba(13,10,19,.15));
+  border:0;cursor:pointer;width:100%;
+}
+.play-over .disc{
+  width:64px;height:64px;border-radius:50%;background:var(--sodium);
+  display:grid;place-items:center;transition:transform .25s var(--ease);
+}
+.play-over:hover .disc{transform:scale(1.08)}
+.play-over svg{width:22px;height:22px;fill:var(--pitch);margin-left:3px}
+
+.title-block{margin-top:26px}
+h1{
+  font-family:var(--fd);font-weight:400;line-height:.86;letter-spacing:-.01em;
+  font-size:clamp(52px,13.5vw,116px);text-transform:uppercase;
+}
+h1 .l2{display:block;color:var(--sodium)}
+.meta-strip{
+  display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:20px;padding-top:16px;
+  border-top:1px solid var(--line);
+  font-size:var(--t-xs);letter-spacing:.16em;text-transform:uppercase;color:var(--haze);
+}
+.logline{margin-top:20px;font-size:var(--t-lg);max-width:52ch;line-height:1.45}
+.hero-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+
+/* ---- about ---- */
+.about-grid{display:grid;gap:32px}
+@media(min-width:820px){.about-grid{grid-template-columns:1.4fr .8fr;gap:56px}}
+.about-body p+p{margin-top:16px}
+.specs{border-top:1px solid var(--line)}
+.specs div{display:flex;justify-content:space-between;gap:18px;padding:11px 0;border-bottom:1px solid var(--line);font-size:var(--t-sm)}
+.specs dt{color:var(--haze);letter-spacing:.1em;text-transform:uppercase;font-size:var(--t-xs)}
+
+/* ---- CAST / billing block (signature) ---- */
+.billing{border-top:1px solid var(--line-2)}
+.act{
+  display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:start;
+  padding:22px 0;border-bottom:1px solid var(--line);
+}
+@media(min-width:760px){.act{grid-template-columns:92px 1fr auto;gap:24px;align-items:center}}
+.act-face{
+  width:64px;height:64px;border-radius:50%;object-fit:cover;
+  background:var(--slab);border:1px solid var(--line-2);
+}
+@media(min-width:760px){.act-face{width:92px;height:92px;border-radius:3px}}
+.act-name{font-family:var(--fd);font-size:var(--t-xl);line-height:1;text-transform:uppercase;letter-spacing:.01em}
+@media(min-width:760px){.act-name{font-size:30px}}
+.act-role{font-size:var(--t-xs);letter-spacing:.18em;text-transform:uppercase;color:var(--sodium);margin-top:7px}
+.act-reach{font-size:var(--t-xs);color:var(--haze);margin-top:4px;letter-spacing:.06em}
+.socials{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.soc{
+  display:inline-flex;align-items:center;gap:6px;padding:6px 11px;
+  border:1px solid var(--line);border-radius:100px;
+  font-size:var(--t-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--haze);
+  transition:border-color .2s,color .2s
+}
+.soc:hover{border-color:var(--sodium);color:var(--sodium)}
+.act-link{display:flex;gap:8px;margin-top:12px}
+@media(min-width:760px){.act-link{margin-top:0;flex-direction:column;align-items:flex-end}}
+
+/* ---- reviews ---- */
+.rev-summary{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:26px}
+.rev-score{font-family:var(--fd);font-size:52px;line-height:1;color:var(--sodium)}
+.stars{display:inline-flex;gap:3px}
+.stars svg{width:15px;height:15px;fill:var(--slab-2)}
+.stars svg.on{fill:var(--sodium)}
+.rev-list{display:grid;gap:14px}
+@media(min-width:760px){.rev-list{grid-template-columns:1fr 1fr}}
+.rev{background:var(--slab);border:1px solid var(--line);border-radius:3px;padding:18px}
+.rev-top{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.rev-who{font-family:var(--fd);font-size:var(--t-sm);letter-spacing:.1em;text-transform:uppercase}
+.rev-when{margin-left:auto;font-size:var(--t-xs);color:var(--haze)}
+.rev p{font-size:var(--t-sm);line-height:1.55}
+.rate-pick{display:inline-flex;gap:5px}
+.rate-pick button{background:none;border:0;cursor:pointer;padding:2px}
+.rate-pick svg{width:26px;height:26px;fill:var(--slab-2);transition:fill .15s}
+.rate-pick button.on svg{fill:var(--sodium)}
+
+/* ---- buy ---- */
+.tiers{display:grid;gap:14px}
+@media(min-width:820px){.tiers{grid-template-columns:repeat(3,1fr)}}
+.tier{
+  background:var(--slab);border:1px solid var(--line);border-radius:3px;
+  padding:24px;display:flex;flex-direction:column;position:relative;
+  transition:border-color .25s,transform .25s var(--ease)
+}
+.tier:hover{border-color:var(--line-2);transform:translateY(-2px)}
+.tier.feat{border-color:var(--sodium)}
+.tier.feat::before{
+  content:'Best value';position:absolute;top:-1px;right:16px;
+  background:var(--sodium);color:var(--pitch);padding:4px 10px;border-radius:0 0 3px 3px;
+  font-family:var(--fd);font-size:10px;letter-spacing:.18em;text-transform:uppercase
+}
+.tier h3{font-family:var(--fd);font-size:var(--t-xl);text-transform:uppercase;letter-spacing:.03em;font-weight:400}
+.tier .price{font-family:var(--fd);font-size:44px;line-height:1;margin:14px 0 4px}
+.tier .price small{font-family:var(--fb);font-size:var(--t-xs);color:var(--haze);letter-spacing:.14em;margin-left:5px}
+.tier ul{list-style:none;margin:16px 0 22px;display:grid;gap:9px}
+.tier li{font-size:var(--t-sm);color:var(--haze);display:flex;gap:9px;align-items:flex-start}
+.tier li::before{content:'—';color:var(--sodium);flex:none}
+.tier .btn{margin-top:auto;width:100%}
+
+/* ---- redeem + owned ---- */
+.panel{background:var(--slab);border:1px solid var(--line);border-radius:3px;padding:24px}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.field label{font-size:var(--t-xs);letter-spacing:.16em;text-transform:uppercase;color:var(--haze)}
+.field input,.field textarea,.field select{
+  background:var(--pitch);border:1px solid var(--line);border-radius:2px;
+  padding:12px 13px;font-size:var(--t-md);font-weight:300;width:100%
+}
+.field input:focus,.field textarea:focus{border-color:var(--sodium);outline:none}
+.row{display:grid;gap:14px}
+@media(min-width:620px){.row{grid-template-columns:1fr 1fr}}
+.code-out{
+  font-family:var(--fd);font-size:26px;letter-spacing:.26em;color:var(--sodium);
+  background:var(--pitch);border:1px dashed var(--line-2);border-radius:3px;
+  padding:16px;text-align:center;margin:12px 0
+}
+
+/* ---- sticky mobile buy bar ---- */
+.buybar{
+  position:fixed;left:0;right:0;bottom:0;z-index:70;
+  background:rgba(23,19,31,.94);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);padding:11px var(--gut);
+  padding-bottom:calc(11px + env(safe-area-inset-bottom));
+  display:flex;align-items:center;gap:12px;
+  transform:translateY(110%);transition:transform .35s var(--ease)
+}
+.buybar.up{transform:translateY(0)}
+.buybar .lab{font-size:var(--t-xs);color:var(--haze);letter-spacing:.12em;text-transform:uppercase;line-height:1.3}
+.buybar .lab b{display:block;font-family:var(--fd);font-size:var(--t-lg);color:var(--bone);letter-spacing:.04em}
+.buybar .btn{margin-left:auto}
+@media(min-width:900px){.buybar{display:none}}
+
+/* ---- footer ---- */
+footer{border-top:1px solid var(--line);padding:36px 0 96px;margin-top:20px}
+@media(min-width:900px){footer{padding-bottom:36px}}
+.foot{display:flex;flex-wrap:wrap;gap:18px;align-items:center;font-size:var(--t-xs);color:var(--haze);letter-spacing:.1em;text-transform:uppercase}
+.foot .pb{margin-left:auto;display:flex;align-items:center;gap:8px}
+.foot .pb b{font-family:var(--fd);color:var(--bone);letter-spacing:.14em}
+
+/* ---- modal ---- */
+.scrim{
+  position:fixed;inset:0;z-index:100;background:rgba(13,10,19,.86);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;padding:var(--gut);
+  opacity:0;pointer-events:none;transition:opacity .25s
+}
+.scrim.open{opacity:1;pointer-events:auto}
+.modal{
+  background:var(--ink);border:1px solid var(--line-2);border-radius:4px;
+  width:100%;max-width:440px;max-height:88vh;overflow:auto;padding:28px
+}
+.modal.wide{max-width:960px;padding:0;background:var(--pitch);border-radius:4px;overflow:hidden}
+.modal h3{font-family:var(--fd);font-size:var(--t-xl);text-transform:uppercase;letter-spacing:.03em;font-weight:400;margin-bottom:6px}
+.modal .x{position:absolute;top:14px;right:16px;z-index:5;background:rgba(13,10,19,.7);border:1px solid var(--line);border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:18px;line-height:1}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin:16px 0 20px}
+.tabs button{flex:1;background:none;border:0;border-bottom:2px solid transparent;padding:11px 0;cursor:pointer;font-family:var(--fd);font-size:var(--t-sm);letter-spacing:.14em;text-transform:uppercase;color:var(--haze)}
+.tabs button.on{color:var(--bone);border-bottom-color:var(--sodium)}
+.note{font-size:var(--t-xs);color:var(--haze);margin-top:12px;line-height:1.5}
+.err{color:#FF7A6E;font-size:var(--t-sm);margin-top:10px;min-height:1.2em}
+.ok{color:#7ED9A8}
+
+/* toast */
+.toast{
+  position:fixed;left:50%;bottom:88px;transform:translate(-50%,20px);z-index:120;
+  background:var(--sodium);color:var(--pitch);padding:11px 20px;border-radius:100px;
+  font-family:var(--fd);font-size:var(--t-xs);letter-spacing:.14em;text-transform:uppercase;
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s var(--ease)
+}
+.toast.up{opacity:1;transform:translate(-50%,0)}
+
+.skel{background:linear-gradient(90deg,var(--slab),var(--slab-2),var(--slab));background-size:200% 100%;animation:sh 1.4s infinite;border-radius:3px}
+@keyframes sh{to{background-position:-200% 0}}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a class="mark" href="#top">Destroying<span>.</span>Desmond</a>
+    <div class="links">
+      <a href="#film">The film</a>
+      <a href="#cast">Cast</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#get">Get it</a>
+    </div>
+    <div class="acct">
+      <button class="btn btn-sm btn-ghost" id="acctBtn">Sign in</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="poster"><img id="posterImg" alt="Destroying Desmond poster"></div>
+    <div>
+      <div class="player-well">
+        <span class="trailer-badge">Trailer · free</span>
+        <div id="trailerMount"></div>
+        <button class="play-over" id="trailerPlay" aria-label="Play trailer">
+          <span class="disc"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+        </button>
+      </div>
+
+      <div class="title-block">
+        <h1>Destroying<span class="l2">Desmond</span></h1>
+        <div class="meta-strip" id="metaStrip">
+          <span>Short film</span><span id="mRuntime">— min</span><span>South Africa</span><span id="mYear"></span>
+        </div>
+        <p class="logline" id="logline"></p>
+        <div class="hero-cta">
+          <button class="btn btn-fill" id="heroBuy">Watch the film</button>
+          <a class="btn btn-ghost" href="#cast">Meet the cast</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== ABOUT ===================== -->
+<section id="film">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">01</span><h2>The film</h2></div>
+    <div class="about-grid reveal">
+      <div class="about-body" id="synopsis"></div>
+      <dl class="specs" id="specs"></dl>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CAST — the billing block ===================== -->
+<section id="cast">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">02</span><h2>Cast</h2>
+      <span class="count" id="castCount"></span>
+    </div>
+    <p class="muted" style="max-width:56ch;margin-bottom:24px">
+      Every name here carries its own link. Tap <em>Copy link</em> to grab a version of this
+      page tagged to that actor — every view and every sale through it gets counted to them.
+    </p>
+    <div class="billing" id="castList"></div>
+  </div>
+</section>
+
+<!-- ===================== REVIEWS ===================== -->
+<section id="reviews">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">03</span><h2>What people said</h2>
+      <span class="count" id="revCount"></span>
+    </div>
+    <div class="rev-summary" id="revSummary"></div>
+    <div class="rev-list" id="revList"></div>
+    <div style="margin-top:22px" id="revCta"></div>
+  </div>
+</section>
+
+<!-- ===================== GET IT ===================== -->
+<section id="get">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">04</span><h2>Get it</h2></div>
+    <div id="ownedPanel" class="hide" style="margin-bottom:20px"></div>
+    <div class="tiers" id="tiers"></div>
+
+    <div class="panel" style="margin-top:32px;max-width:560px">
+      <h3 style="font-size:var(--t-lg)">Got a gift code?</h3>
+      <p class="muted" style="font-size:var(--t-sm);margin-bottom:14px">Someone bought this for you. Enter the code to unlock it.</p>
+      <div class="field"><label for="giftCode">Gift code</label><input id="giftCode" placeholder="DD-XXXXXX" autocomplete="off"></div>
+      <button class="btn btn-fill" id="redeemBtn">Unlock the film</button>
+      <div class="err" id="redeemErr"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span>© <span id="yr"></span> Destroying Desmond</span>
+    <a href="mailto:julian@discovr.tv">Contact</a>
+    <span class="pb">Powered by <b>4flieks</b></span>
+  </div>
+</footer>
+
+<!-- sticky mobile buy bar -->
+<div class="buybar" id="buybar">
+  <div class="lab">Stream from<b id="barPrice">R—</b></div>
+  <button class="btn btn-fill btn-sm" id="barBuy">Watch now</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ===================== MODALS ===================== -->
+<div class="scrim" id="authScrim">
+  <div class="modal" style="position:relative">
+    <button class="x" data-close aria-label="Close">×</button>
+    <h3 id="authTitle">Sign in</h3>
+    <p class="muted" style="font-size:var(--t-sm)">You need an account so your film stays with you.</p>
+    <div class="tabs"><button class="on" data-mode="in">Sign in</button><button data-mode="up">Create account</button></div>
+    <div class="field" id="nameField" style="display:none"><label for="auName">Name</label><input id="auName" autocomplete="name"></div>
+    <div class="field"><label for="auEmail">Email</label><input id="auEmail" type="email" autocomplete="email"></div>
+    <div class="field"><label for="auPass">Password</label><input id="auPass" type="password" autocomplete="current-password"></div>
+    <button class="btn btn-fill" id="authGo" style="width:100%">Sign in</button>
+    <div class="err" id="authErr"></div>
+    <button class="btn btn-ghost btn-sm" id="resetPw" style="width:100%;margin-top:10px;border:0;color:var(--haze)">Forgot password</button>
+  </div>
+</div>
+
+<div class="scrim" id="buyScrim">
+  <div class="modal" style="position:relative">
+    <button class="x" data-close aria-label="Close">×</button>
+    <h3 id="buyTitle">Checkout</h3>
+    <p class="muted" style="font-size:var(--t-sm)" id="buySub"></p>
+    <div id="giftFields" class="hide" style="margin-top:18px">
+      <div class="field"><label for="gName">Who's it for</label><input id="gName" placeholder="Their name"></div>
+      <div class="field"><label for="gMsg">Message (optional)</label><textarea id="gMsg" rows="3" placeholder="Watch this, then call me."></textarea></div>
+      <p class="note">You'll get a code to send them however you like — WhatsApp, DM, in person.</p>
+    </div>
+    <button class="btn btn-fill" id="payGo" style="width:100%;margin-top:20px">Pay with PayFast</button>
+    <div class="err" id="buyErr"></div>
+    <p class="note">Card, Instant EFT, SnapScan and more via PayFast. Filmmakers keep 70%.</p>
+  </div>
+</div>
+
+<div class="scrim" id="watchScrim">
+  <div class="modal wide" style="position:relative">
+    <button class="x" data-close aria-label="Close">×</button>
+    <div style="aspect-ratio:16/9;background:#000"><video id="feature" controls playsinline controlsList="nodownload" style="width:100%;height:100%"></video></div>
+  </div>
+</div>
+
+<div class="scrim" id="revScrim">
+  <div class="modal" style="position:relative">
+    <button class="x" data-close aria-label="Close">×</button>
+    <h3>Write a review</h3>
+    <p class="muted" style="font-size:var(--t-sm);margin-bottom:16px">Only people who've watched it can post.</p>
+    <div class="field"><label>Your rating</label><div class="rate-pick" id="ratePick"></div></div>
+    <div class="field"><label for="revBody">Your review</label><textarea id="revBody" rows="4" maxlength="600" placeholder="No spoilers."></textarea></div>
+    <button class="btn btn-fill" id="revGo" style="width:100%">Post review</button>
+    <div class="err" id="revErr"></div>
+    <p class="note">Reviews appear once approved.</p>
+  </div>
+</div>
+
+<div class="scrim" id="codeScrim">
+  <div class="modal" style="position:relative">
+    <button class="x" data-close aria-label="Close">×</button>
+    <h3>Your gift code</h3>
+    <p class="muted" style="font-size:var(--t-sm)">Send this to them. It unlocks one permanent copy.</p>
+    <div class="code-out" id="codeOut">—</div>
+    <button class="btn btn-fill" id="codeShare" style="width:100%">Share it</button>
+  </div>
+</div>
+
+<!-- ===================== FIREBASE ===================== -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const FILM_ID = 'destroying-desmond';
+
+// Copy apiKey / appId / messagingSenderId from your existing 4flieks index.html
+const firebaseConfig = {
+  apiKey:            "PASTE_FROM_4FLIEKS_INDEX",
+  authDomain:        "flieks-app.firebaseapp.com",
+  databaseURL:       "https://flieks-app-default-rtdb.firebaseio.com",
+  projectId:         "flieks-app",
+  storageBucket:     "flieks-app.firebasestorage.app",
+  messagingSenderId: "PASTE_FROM_4FLIEKS_INDEX",
+  appId:             "PASTE_FROM_4FLIEKS_INDEX"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.database();
+
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const rands = n => Math.round(n) === n ? `R${n}` : `R${n.toFixed(2)}`;
+
+let FILM = null, CAST = [], USER = null, ACCESS = null, PENDING = null, MYRATE = 0;
+
+/* ============================================================
+   ACTOR ATTRIBUTION  —  ?a=slug
+   ============================================================ */
+const REF = (() => {
+  const q = new URLSearchParams(location.search).get('a');
+  if (q) {
+    const slug = q.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
+    if (slug) {
+      localStorage.setItem('dd_ref', slug);
+      localStorage.setItem('dd_ref_at', Date.now());
+      db.ref(`dd_stats/refs/${slug}/clicks`).transaction(v => (v || 0) + 1).catch(() => {});
+      return slug;
+    }
+  }
+  // referral sticks for 30 days
+  const at = +localStorage.getItem('dd_ref_at') || 0;
+  if (Date.now() - at > 30 * 864e5) { localStorage.removeItem('dd_ref'); return null; }
+  return localStorage.getItem('dd_ref');
+})();
+
+/* ============================================================
+   UI HELPERS
+   ============================================================ */
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('up');
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('up'), 2400);
+}
+function openM(id) { $(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
+function shut(el) {
+  el.classList.remove('open'); document.body.style.overflow = '';
+  const v = el.querySelector('video'); if (v) v.pause();
+}
+$$('.scrim').forEach(s => {
+  s.addEventListener('click', e => { if (e.target === s || e.target.dataset.close !== undefined) shut(s); });
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') $$('.scrim.open').forEach(shut); });
+
+const star = on => `<svg viewBox="0 0 24 24" class="${on ? 'on' : ''}"><path d="M12 2l3 6.6 7 .8-5.2 4.8 1.4 7L12 17.8 5.8 21.2l1.4-7L2 9.4l7-.8z"/></svg>`;
+const stars = n => `<span class="stars">${[1,2,3,4,5].map(i => star(i <= Math.round(n))).join('')}</span>`;
+
+new IntersectionObserver((es, o) => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); o.unobserve(e.target); }
+}), { threshold: .12 }).observe($('.about-grid'));
+
+addEventListener('scroll', () => {
+  $('#nav').classList.toggle('stuck', scrollY > 8);
+  $('#buybar').classList.toggle('up', scrollY > 520 && !ACCESS);
+}, { passive: true });
+
+$('#yr').textContent = new Date().getFullYear();
+
+/* ============================================================
+   LOAD FILM + CAST
+   ============================================================ */
+async function loadFilm() {
+  const snap = await db.ref('dd_config').get();
+  FILM = snap.val() || {};
+
+  $('#posterImg').src = FILM.posterUrl || '';
+  $('#logline').textContent = FILM.logline || '';
+  $('#mRuntime').textContent = (FILM.runtime || 14) + ' min';
+  $('#mYear').textContent = FILM.year || '';
+
+  $('#synopsis').innerHTML = (FILM.synopsis || '')
+    .split(/\n{2,}/).filter(Boolean).map(p => `<p>${esc(p)}</p>`).join('');
+
+  const specs = FILM.credits || {};
+  $('#specs').innerHTML = Object.entries(specs)
+    .map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('');
+
+  mountTrailer();
+  renderTiers();
+  $('#barPrice').textContent = rands(FILM.priceStream ?? 35);
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; }
+
+function mountTrailer() {
+  const url = FILM.trailerUrl || '';
+  const m = url.match(/(?:youtu\.be\/|v=|embed\/)([\w-]{11})/);
+  $('#trailerPlay').onclick = () => {
+    if (m) {
+      $('#trailerMount').innerHTML =
+        `<iframe src="https://www.youtube.com/embed/${m[1]}?autoplay=1&rel=0&playsinline=1"
+          allow="autoplay; fullscreen" allowfullscreen title="Destroying Desmond trailer"></iframe>`;
+    } else {
+      $('#trailerMount').innerHTML =
+        `<video src="${esc(url)}" poster="${esc(FILM.stillUrl || FILM.posterUrl || '')}" controls autoplay playsinline></video>`;
+    }
+    $('#trailerPlay').classList.add('hide');
+    db.ref('dd_stats/trailerPlays').transaction(v => (v || 0) + 1).catch(() => {});
+    if (REF) db.ref(`dd_stats/refs/${REF}/trailerPlays`).transaction(v => (v || 0) + 1).catch(() => {});
+  };
+}
+
+async function loadCast() {
+  const snap = await db.ref('dd_cast').get();
+  const val = snap.val() || {};
+  CAST = Object.entries(val).map(([slug, c]) => ({ slug, ...c }))
+              .sort((a, b) => (a.order ?? 99) - (b.order ?? 99));
+  $('#castCount').textContent = CAST.length + ' billed';
+
+  const SOC = { instagram: 'Instagram', tiktok: 'TikTok', x: 'X', youtube: 'YouTube', facebook: 'Facebook' };
+
+  $('#castList').innerHTML = CAST.map(c => `
+    <div class="act">
+      <img class="act-face" src="${esc(c.photoUrl || '')}" alt="${esc(c.name)}" loading="lazy">
+      <div>
+        <div class="act-name">${esc(c.name)}</div>
+        <div class="act-role">${esc(c.role || '')}</div>
+        ${c.reach ? `<div class="act-reach">${esc(c.reach)} followers</div>` : ''}
+        <div class="socials">
+          ${Object.keys(SOC).filter(k => c[k]).map(k =>
+            `<a class="soc" href="${esc(c[k])}" target="_blank" rel="noopener">${SOC[k]}</a>`).join('')}
+        </div>
+      </div>
+      <div class="act-link">
+        <button class="btn btn-sm btn-ghost" data-copy="${esc(c.slug)}">Copy link</button>
+      </div>
+    </div>`).join('');
+
+  $$('[data-copy]').forEach(b => b.onclick = () => {
+    const url = `${location.origin}${location.pathname}?a=${b.dataset.copy}`;
+    navigator.clipboard.writeText(url).then(() => toast('Link copied'));
+  });
+}
+
+/* ============================================================
+   PRICING TIERS
+   ============================================================ */
+function renderTiers() {
+  const s = FILM.priceStream ?? 35, o = FILM.priceOwn ?? 89, g = FILM.priceGift ?? o;
+  const win = FILM.streamHours ?? 48;
+  $('#tiers').innerHTML = `
+    <div class="tier">
+      <h3>Stream</h3>
+      <div class="price">${rands(s)}<small>once off</small></div>
+      <ul>
+        <li>${win} hours from the moment you press play</li>
+        <li>Watch on any device, as many times as you like in the window</li>
+        <li>Full HD</li>
+      </ul>
+      <button class="btn btn-ghost" data-tier="stream">Stream it</button>
+    </div>
+    <div class="tier feat">
+      <h3>Own</h3>
+      <div class="price">${rands(o)}<small>forever</small></div>
+      <ul>
+        <li>Keep it — no expiry</li>
+        <li>Download the file to your phone or laptop</li>
+        <li>Full HD, plus the behind-the-scenes cut</li>
+      </ul>
+      <button class="btn btn-fill" data-tier="own">Own it</button>
+    </div>
+    <div class="tier">
+      <h3>Gift</h3>
+      <div class="price">${rands(g)}<small>for a friend</small></div>
+      <ul>
+        <li>You get a code to send them</li>
+        <li>They get a permanent copy</li>
+        <li>Add a message</li>
+      </ul>
+      <button class="btn btn-ghost" data-tier="gift">Send it</button>
+    </div>`;
+  $$('[data-tier]').forEach(b => b.onclick = () => startBuy(b.dataset.tier));
+}
+
+$('#heroBuy').onclick = () => ACCESS ? watch() : document.getElementById('get').scrollIntoView();
+$('#barBuy').onclick  = () => startBuy('stream');
+
+/* ============================================================
+   AUTH
+   ============================================================ */
+let authMode = 'in';
+$('#acctBtn').onclick = () => USER ? signOutNow() : openM('#authScrim');
+$$('.tabs button').forEach(b => b.onclick = () => {
+  $$('.tabs button').forEach(x => x.classList.remove('on')); b.classList.add('on');
+  authMode = b.dataset.mode;
+  $('#nameField').style.display = authMode === 'up' ? '' : 'none';
+  $('#authTitle').textContent = authMode === 'up' ? 'Create account' : 'Sign in';
+  $('#authGo').textContent    = authMode === 'up' ? 'Create account' : 'Sign in';
+});
+
+$('#authGo').onclick = async () => {
+  const email = $('#auEmail').value.trim(), pass = $('#auPass').value, name = $('#auName').value.trim();
+  $('#authErr').textContent = '';
+  if (!email || !pass) { $('#authErr').textContent = 'Email and password are both needed.'; return; }
+  $('#authGo').disabled = true;
+  try {
+    if (authMode === 'up') {
+      const cred = await auth.createUserWithEmailAndPassword(email, pass);
+      await cred.user.updateProfile({ displayName: name || email.split('@')[0] });
+      await db.ref(`flieks_users/${cred.user.uid}`).update({
+        email, name: name || '', role: 'viewer', source: 'dd', ref: REF || null,
+        createdAt: firebase.database.ServerValue.TIMESTAMP
+      });
+    } else {
+      await auth.signInWithEmailAndPassword(email, pass);
+    }
+    shut($('#authScrim'));
+    if (PENDING) { const t = PENDING; PENDING = null; startBuy(t); }
+  } catch (e) {
+    $('#authErr').textContent = friendly(e.code);
+  } finally { $('#authGo').disabled = false; }
+};
+
+$('#resetPw').onclick = async () => {
+  const email = $('#auEmail').value.trim();
+  if (!email) { $('#authErr').textContent = 'Type your email above first.'; return; }
+  try { await auth.sendPasswordResetEmail(email); $('#authErr').className = 'err ok';
+        $('#authErr').textContent = 'Reset link sent. Check your inbox.'; }
+  catch (e) { $('#authErr').textContent = friendly(e.code); }
+};
+
+function friendly(code) {
+  return ({
+    'auth/invalid-email': 'That email address isn\'t valid.',
+    'auth/user-not-found': 'No account with that email. Create one instead.',
+    'auth/wrong-password': 'Wrong password. Try again or reset it.',
+    'auth/invalid-credential': 'Email or password is wrong.',
+    'auth/email-already-in-use': 'That email already has an account. Sign in.',
+    'auth/weak-password': 'Password needs at least 6 characters.',
+    'auth/too-many-requests': 'Too many tries. Wait a minute and retry.'
+  })[code] || 'Something went wrong. Try again.';
+}
+
+function signOutNow() { auth.signOut(); toast('Signed out'); }
+
+auth.onAuthStateChanged(async u => {
+  USER = u;
+  $('#acctBtn').textContent = u ? (u.displayName || 'Account') : 'Sign in';
+  await checkAccess();
+  renderReviewCta();
+});
+
+/* ============================================================
+   ACCESS
+   ============================================================ */
+async function checkAccess() {
+  ACCESS = null;
+  $('#ownedPanel').classList.add('hide');
+  if (!USER) return;
+  const snap = await db.ref(`flieks_purchases/${USER.uid}/${FILM_ID}`).get().catch(() => null);
+  const p = snap && snap.val();
+  if (!p || p.status !== 'paid') return;
+  if (p.type === 'stream' && p.expiresAt && Date.now() > p.expiresAt) { renderExpired(); return; }
+  ACCESS = p;
+  renderOwned(p);
+  $('#buybar').classList.remove('up');
+}
+
+function renderOwned(p) {
+  const perm = p.type !== 'stream';
+  const left = p.expiresAt ? Math.max(0, Math.round((p.expiresAt - Date.now()) / 36e5)) : null;
+  $('#ownedPanel').innerHTML = `
+    <div class="panel" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;border-color:var(--sodium)">
+      <div>
+        <div class="eyebrow">${perm ? 'Yours to keep' : 'Rental active'}</div>
+        <div style="font-family:var(--fd);font-size:var(--t-xl);text-transform:uppercase;margin-top:5px">Destroying Desmond</div>
+        ${!perm ? `<div class="muted" style="font-size:var(--t-sm)">${left === null ? 'Starts when you press play' : left + ' hours left'}</div>` : ''}
+      </div>
+      <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-fill" id="playBtn">Play</button>
+        ${perm ? '<button class="btn btn-ghost" id="dlBtn">Download</button>' : ''}
+      </div>
+    </div>`;
+  $('#ownedPanel').classList.remove('hide');
+  $('#playBtn').onclick = watch;
+  if (perm) $('#dlBtn').onclick = download;
+}
+
+function renderExpired() {
+  $('#ownedPanel').innerHTML = `
+    <div class="panel">
+      <div class="eyebrow">Rental ended</div>
+      <p class="muted" style="font-size:var(--t-sm);margin-top:6px">Your ${FILM.streamHours ?? 48}-hour window has closed. Stream it again, or own it outright.</p>
+    </div>`;
+  $('#ownedPanel').classList.remove('hide');
+}
+
+async function playableUrl() {
+  const token = await USER.getIdToken(true);
+  const r = await fetch('/.netlify/functions/dd-stream', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, filmId: FILM_ID })
+  });
+  if (!r.ok) throw new Error('no-access');
+  return (await r.json()).url;
+}
+
+async function watch() {
+  try {
+    // start the rental clock on first play
+    if (ACCESS.type === 'stream' && !ACCESS.expiresAt) {
+      await fetch('/.netlify/functions/dd-stream', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: await USER.getIdToken(true), filmId: FILM_ID, start: true })
+      });
+    }
+    const url = await playableUrl();
+    $('#feature').src = url;
+    openM('#watchScrim');
+    $('#feature').play().catch(() => {});
+    db.ref('dd_stats/plays').transaction(v => (v || 0) + 1).catch(() => {});
+  } catch { toast('Could not start playback'); }
+}
+
+async function download() {
+  try {
+    const url = await playableUrl();
+    const a = document.createElement('a');
+    a.href = url; a.download = 'Destroying-Desmond.mp4'; a.click();
+    toast('Download started');
+  } catch { toast('Download unavailable'); }
+}
+
+/* ============================================================
+   CHECKOUT
+   ============================================================ */
+function startBuy(tier) {
+  if (!USER) { PENDING = tier; openM('#authScrim'); return; }
+  const price = { stream: FILM.priceStream ?? 35, own: FILM.priceOwn ?? 89, gift: FILM.priceGift ?? FILM.priceOwn ?? 89 }[tier];
+  const label = { stream: 'Stream', own: 'Own', gift: 'Gift' }[tier];
+  $('#buyTitle').textContent = `${label} — ${rands(price)}`;
+  $('#buySub').textContent = {
+    stream: `${FILM.streamHours ?? 48} hours from your first play.`,
+    own: 'Permanent access plus download.',
+    gift: 'You get a code to pass on.'
+  }[tier];
+  $('#giftFields').classList.toggle('hide', tier !== 'gift');
+  $('#buyErr').textContent = '';
+  $('#payGo').dataset.tier = tier;
+  openM('#buyScrim');
+}
+
+$('#payGo').onclick = async () => {
+  const tier = $('#payGo').dataset.tier;
+  $('#payGo').disabled = true; $('#buyErr').textContent = '';
+  try {
+    const body = {
+      token: await USER.getIdToken(true),
+      filmId: FILM_ID,
+      tier,
+      ref: REF || null,
+      giftTo: tier === 'gift' ? $('#gName').value.trim() : null,
+      giftMsg: tier === 'gift' ? $('#gMsg').value.trim().slice(0, 300) : null,
+      returnUrl: location.origin + location.pathname
+    };
+    const r = await fetch('/.netlify/functions/dd-checkout', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+    });
+    if (!r.ok) throw new Error(await r.text());
+    const { action, fields } = await r.json();
+
+    // hand off to PayFast
+    const f = document.createElement('form');
+    f.method = 'POST'; f.action = action;
+    Object.entries(fields).forEach(([k, v]) => {
+      const i = document.createElement('input'); i.type = 'hidden'; i.name = k; i.value = v; f.appendChild(i);
+    });
+    document.body.appendChild(f); f.submit();
+  } catch (e) {
+    $('#buyErr').textContent = 'Checkout could not start. Try again in a moment.';
+    $('#payGo').disabled = false;
+  }
+};
+
+/* ============================================================
+   GIFT REDEEM
+   ============================================================ */
+$('#redeemBtn').onclick = async () => {
+  const code = $('#giftCode').value.trim().toUpperCase();
+  $('#redeemErr').className = 'err'; $('#redeemErr').textContent = '';
+  if (!code) { $('#redeemErr').textContent = 'Enter the code you were sent.'; return; }
+  if (!USER) { $('#redeemErr').textContent = 'Sign in first, then redeem.'; openM('#authScrim'); return; }
+  $('#redeemBtn').disabled = true;
+  try {
+    const r = await fetch('/.netlify/functions/dd-redeem', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: await USER.getIdToken(true), code })
+    });
+    const d = await r.json();
+    if (!r.ok) { $('#redeemErr').textContent = d.message || 'That code did not work.'; return; }
+    $('#redeemErr').className = 'err ok';
+    $('#redeemErr').textContent = 'Unlocked. It is yours.';
+    await checkAccess();
+    $('#ownedPanel').scrollIntoView({ block: 'center' });
+  } catch {
+    $('#redeemErr').textContent = 'Could not reach the server. Try again.';
+  } finally { $('#redeemBtn').disabled = false; }
+};
+
+/* ---- show gift code after a gift purchase returns ---- */
+(function giftReturn() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('paid') !== '1') return;
+  history.replaceState({}, '', location.pathname);
+  const off = auth.onAuthStateChanged(async u => {
+    off();
+    if (!u) return;
+    await new Promise(r => setTimeout(r, 2500));  // give the ITN a moment to land
+  const snap = await db.ref('dd_gifts').orderByChild('buyerUid').equalTo(u.uid).limitToLast(1).get().catch(() => null);
+  const v = snap && snap.val();
+  if (v) {
+    const code = Object.keys(v)[0];
+    $('#codeOut').textContent = code;
+    $('#codeShare').onclick = () => {
+      const text = `I bought you Destroying Desmond. Unlock it at ${location.origin}${location.pathname} with code ${code}`;
+      if (navigator.share) navigator.share({ text }); else { navigator.clipboard.writeText(text); toast('Copied'); }
+    };
+    openM('#codeScrim');
+    } else { await checkAccess(); toast('Payment received'); }
+  });
+})();
+
+/* ============================================================
+   REVIEWS
+   ============================================================ */
+async function loadReviews() {
+  const snap = await db.ref('dd_reviews').orderByChild('approved').equalTo(true).limitToLast(40).get().catch(() => null);
+  const val = (snap && snap.val()) || {};
+  const list = Object.values(val).sort((a, b) => b.createdAt - a.createdAt);
+  $('#revCount').textContent = list.length ? `${list.length} review${list.length > 1 ? 's' : ''}` : '';
+
+  if (!list.length) {
+    $('#revSummary').innerHTML = '';
+    $('#revList').innerHTML = '<p class="muted">No reviews yet. Watch it and be the first.</p>';
+    return;
+  }
+  const avg = list.reduce((s, r) => s + (r.rating || 0), 0) / list.length;
+  $('#revSummary').innerHTML =
+    `<div class="rev-score">${avg.toFixed(1)}</div>
+     <div>${stars(avg)}<div class="muted" style="font-size:var(--t-xs);letter-spacing:.14em;text-transform:uppercase;margin-top:5px">from ${list.length} viewer${list.length > 1 ? 's' : ''}</div></div>`;
+  $('#revList').innerHTML = list.map(r => `
+    <div class="rev">
+      <div class="rev-top">
+        <span class="rev-who">${esc(r.name || 'Viewer')}</span>
+        ${stars(r.rating)}
+        <span class="rev-when">${when(r.createdAt)}</span>
+      </div>
+      <p>${esc(r.body)}</p>
+    </div>`).join('');
+}
+
+function when(ts) {
+  const d = Math.floor((Date.now() - ts) / 864e5);
+  return d < 1 ? 'today' : d < 2 ? 'yesterday' : d < 30 ? d + ' days ago'
+       : new Date(ts).toLocaleDateString('en-ZA', { month: 'short', year: 'numeric' });
+}
+
+function renderReviewCta() {
+  const el = $('#revCta');
+  if (!USER) { el.innerHTML = '<p class="muted" style="font-size:var(--t-sm)">Watched it? Sign in to leave a review.</p>'; return; }
+  if (!ACCESS) { el.innerHTML = '<p class="muted" style="font-size:var(--t-sm)">Reviews are open to anyone who has watched the film.</p>'; return; }
+  el.innerHTML = '<button class="btn btn-ghost" id="openRev">Write a review</button>';
+  $('#openRev').onclick = () => { drawRate(0); openM('#revScrim'); };
+}
+
+function drawRate(n) {
+  MYRATE = n;
+  $('#ratePick').innerHTML = [1,2,3,4,5].map(i =>
+    `<button class="${i <= n ? 'on' : ''}" data-r="${i}" aria-label="${i} star">${star(i <= n)}</button>`).join('');
+  $$('#ratePick button').forEach(b => b.onclick = () => drawRate(+b.dataset.r));
+}
+
+$('#revGo').onclick = async () => {
+  const body = $('#revBody').value.trim();
+  $('#revErr').className = 'err'; $('#revErr').textContent = '';
+  if (!MYRATE) { $('#revErr').textContent = 'Pick a rating first.'; return; }
+  if (body.length < 10) { $('#revErr').textContent = 'Write at least a sentence.'; return; }
+  $('#revGo').disabled = true;
+  try {
+    await db.ref('dd_reviews').push({
+      uid: USER.uid, name: USER.displayName || 'Viewer',
+      rating: MYRATE, body, approved: false, ref: REF || null,
+      createdAt: firebase.database.ServerValue.TIMESTAMP
+    });
+    shut($('#revScrim'));
+    toast('Review submitted');
+    $('#revBody').value = '';
+  } catch { $('#revErr').textContent = 'Could not post that. Try again.'; }
+  finally { $('#revGo').disabled = false; }
+};
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+loadFilm().catch(() => toast('Could not load film details'));
+loadCast().catch(() => {});
+loadReviews().catch(() => {});
+</script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+{
+  "dd_config": {
+    "title": "Destroying Desmond",
+    "logline": "Replace this with one sentence that makes someone stop scrolling.",
+    "synopsis": "First paragraph of the synopsis goes here.\n\nSecond paragraph. Blank lines between paragraphs become separate paragraphs on the page.",
+    "runtime": 14,
+    "year": 2026,
+    "posterUrl": "https://firebasestorage.googleapis.com/.../poster-9x16.jpg",
+    "stillUrl": "https://firebasestorage.googleapis.com/.../still-16x9.jpg",
+    "trailerUrl": "https://youtu.be/XXXXXXXXXXX",
+    "priceStream": 35,
+    "priceOwn": 89,
+    "priceGift": 89,
+    "streamHours": 48,
+    "credits": {
+      "Director": "",
+      "Written by": "",
+      "Producer": "",
+      "Cinematography": "",
+      "Edit": "",
+      "Music": "",
+      "Runtime": "14 min",
+      "Language": "English, isiZulu",
+      "Shot in": "Johannesburg"
+    }
+  },
+
+  "dd_private": {
+    "destroying-desmond": {
+      "videoUrl": "https://firebasestorage.googleapis.com/.../destroying-desmond.mp4?alt=media&token=..."
+    }
+  },
+
+  "dd_cast": {
+    "actor-one": {
+      "name": "Actor One",
+      "role": "Desmond",
+      "order": 1,
+      "reach": "2.1M",
+      "photoUrl": "https://firebasestorage.googleapis.com/.../actor-one.jpg",
+      "instagram": "https://instagram.com/actorone",
+      "tiktok": "https://tiktok.com/@actorone",
+      "x": "",
+      "youtube": ""
+    },
+    "actor-two": {
+      "name": "Actor Two",
+      "role": "Nandi",
+      "order": 2,
+      "reach": "1.4M",
+      "photoUrl": "https://firebasestorage.googleapis.com/.../actor-two.jpg",
+      "instagram": "https://instagram.com/actortwo",
+      "tiktok": "https://tiktok.com/@actortwo"
+    }
+  },
+
+  "dd_stats": {
+    "totals": { "sales": 0, "revenue": 0 },
+    "trailerPlays": 0,
+    "plays": 0
+  }
+}

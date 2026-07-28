@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Destroying Desmond — attribution</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#17131F;--pitch:#0D0A13;--slab:#231C30;--sodium:#F0A82E;--bone:#EDE7DB;--haze:#9A90AD;--line:rgba(237,231,219,.13);
+--fd:'Anton',sans-serif;--fb:'Sora',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--bone);font-family:var(--fb);font-weight:300;font-size:15px;line-height:1.6;padding:24px}
+.wrap{max-width:1000px;margin:0 auto}
+h1{font-family:var(--fd);font-size:34px;text-transform:uppercase;letter-spacing:.01em;font-weight:400;line-height:1}
+.sub{color:var(--haze);font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin-top:8px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:28px 0}
+.card{background:var(--slab);border:1px solid var(--line);border-radius:3px;padding:18px}
+.card .k{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--haze)}
+.card .v{font-family:var(--fd);font-size:32px;line-height:1.1;margin-top:6px}
+.card .v.amber{color:var(--sodium)}
+table{width:100%;border-collapse:collapse;margin-top:8px}
+th,td{text-align:left;padding:13px 10px;border-bottom:1px solid var(--line);font-size:14px}
+th{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--haze);font-weight:400}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+tbody tr:hover{background:rgba(237,231,219,.03)}
+.who{font-family:var(--fd);font-size:17px;text-transform:uppercase;letter-spacing:.03em}
+.slug{font-size:11px;color:var(--haze)}
+.bar{height:4px;background:var(--sodium);border-radius:2px;min-width:2px}
+.rate{color:var(--sodium)}
+.gate{max-width:360px;margin:12vh auto;background:var(--slab);border:1px solid var(--line);border-radius:3px;padding:26px}
+input{width:100%;background:var(--pitch);border:1px solid var(--line);border-radius:2px;padding:11px;color:var(--bone);font:inherit;margin-bottom:12px}
+button{background:var(--sodium);border:0;color:var(--pitch);font-family:var(--fd);letter-spacing:.14em;text-transform:uppercase;
+padding:12px 20px;border-radius:2px;cursor:pointer;font-size:13px}
+.err{color:#FF7A6E;font-size:13px;margin-top:8px}
+.copy{background:none;border:1px solid var(--line);color:var(--haze);padding:6px 11px;font-size:11px}
+.copy:hover{border-color:var(--sodium);color:var(--sodium)}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <div class="gate" id="gate">
+    <h1 style="font-size:22px">Attribution</h1>
+    <p class="sub" style="margin-bottom:18px">Admin only</p>
+    <input id="em" type="email" placeholder="Email" autocomplete="email">
+    <input id="pw" type="password" placeholder="Password" autocomplete="current-password">
+    <button id="go">Sign in</button>
+    <div class="err" id="err"></div>
+  </div>
+  <div id="main" style="display:none"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:        "PASTE_FROM_4FLIEKS_INDEX",
+  authDomain:    "flieks-app.firebaseapp.com",
+  databaseURL:   "https://flieks-app-default-rtdb.firebaseio.com",
+  projectId:     "flieks-app",
+  storageBucket: "flieks-app.firebasestorage.app",
+  appId:         "PASTE_FROM_4FLIEKS_INDEX"
+});
+const auth = firebase.auth(), db = firebase.database();
+const $ = s => document.querySelector(s);
+const esc = s => { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; };
+const rand = n => 'R' + (Number(n) || 0).toLocaleString('en-ZA', { minimumFractionDigits: 2 });
+
+$('#go').onclick = async () => {
+  $('#err').textContent = '';
+  try { await auth.signInWithEmailAndPassword($('#em').value.trim(), $('#pw').value); }
+  catch { $('#err').textContent = 'Sign-in failed.'; }
+};
+
+auth.onAuthStateChanged(async u => {
+  if (!u) { $('#gate').style.display = ''; $('#main').style.display = 'none'; return; }
+  // direct REST read with a force-refreshed token — the SDK caches stale role data
+  const token = await u.getIdToken(true);
+  const me = await fetch(`https://flieks-app-default-rtdb.firebaseio.com/flieks_users/${u.uid}.json?auth=${token}`)
+    .then(r => r.json()).catch(() => null);
+  if (!me || me.role !== 'admin') { $('#err').textContent = 'This account is not an admin.'; auth.signOut(); return; }
+  $('#gate').style.display = 'none'; $('#main').style.display = '';
+  render(token);
+});
+
+async function render(token) {
+  const base = 'https://flieks-app-default-rtdb.firebaseio.com';
+  const [refs, cast, totals] = await Promise.all([
+    fetch(`${base}/dd_stats/refs.json?auth=${token}`).then(r => r.json()),
+    fetch(`${base}/dd_cast.json?auth=${token}`).then(r => r.json()),
+    fetch(`${base}/dd_stats/totals.json?auth=${token}`).then(r => r.json())
+  ]);
+
+  const rows = Object.entries(refs || {}).map(([slug, s]) => ({
+    slug,
+    name: (cast || {})[slug]?.name || slug,
+    reach: (cast || {})[slug]?.reach || '',
+    clicks: s.clicks || 0,
+    trailers: s.trailerPlays || 0,
+    sales: s.sales || 0,
+    revenue: s.revenue || 0
+  })).sort((a, b) => b.revenue - a.revenue || b.sales - a.sales);
+
+  const tot = totals || {};
+  const attributed = rows.reduce((n, r) => n + r.sales, 0);
+  const clicks = rows.reduce((n, r) => n + r.clicks, 0);
+  const maxRev = Math.max(1, ...rows.map(r => r.revenue));
+
+  $('#main').innerHTML = `
+    <h1>Attribution</h1>
+    <p class="sub">Destroying Desmond · who is actually converting</p>
+    <div class="cards">
+      <div class="card"><div class="k">Revenue</div><div class="v amber">${rand(tot.revenue)}</div></div>
+      <div class="card"><div class="k">Sales</div><div class="v">${tot.sales || 0}</div></div>
+      <div class="card"><div class="k">Link clicks</div><div class="v">${clicks}</div></div>
+      <div class="card"><div class="k">Click → sale</div><div class="v">${clicks ? (attributed / clicks * 100).toFixed(1) + '%' : '—'}</div></div>
+      <div class="card"><div class="k">Direct / untagged</div><div class="v">${Math.max(0, (tot.sales || 0) - attributed)}</div></div>
+    </div>
+    <table>
+      <thead><tr>
+        <th>Cast member</th><th class="n">Clicks</th><th class="n">Trailer</th>
+        <th class="n">Sales</th><th class="n">Conv.</th><th class="n">Revenue</th><th></th>
+      </tr></thead>
+      <tbody>${rows.length ? rows.map(r => `
+        <tr>
+          <td><div class="who">${esc(r.name)}</div><div class="slug">?a=${esc(r.slug)}${r.reach ? ' · ' + esc(r.reach) + ' followers' : ''}</div></td>
+          <td class="n">${r.clicks}</td>
+          <td class="n">${r.trailers}</td>
+          <td class="n">${r.sales}</td>
+          <td class="n rate">${r.clicks ? (r.sales / r.clicks * 100).toFixed(1) + '%' : '—'}</td>
+          <td class="n">${rand(r.revenue)}<div class="bar" style="width:${r.revenue / maxRev * 100}%;margin-top:5px"></div></td>
+          <td class="n"><button class="copy" data-s="${esc(r.slug)}">Copy link</button></td>
+        </tr>`).join('') : '<tr><td colspan="7" style="color:var(--haze)">No tagged traffic yet. Hand the cast their links.</td></tr>'}
+      </tbody>
+    </table>
+    <p class="sub" style="margin-top:20px">Conv. = sales ÷ clicks on that actor's link. Referrals stick for 30 days.</p>
+  `;
+
+  document.querySelectorAll('.copy').forEach(b => b.onclick = () => {
+    navigator.clipboard.writeText(`${location.origin}/?a=${b.dataset.s}`);
+    b.textContent = 'Copied';
+    setTimeout(() => b.textContent = 'Copy link', 1500);
+  });
+}
+</script>
+</body>
+</html>
