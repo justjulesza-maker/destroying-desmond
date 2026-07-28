@@ -905,10 +905,10 @@ $('#redeemBtn').onclick = async () => {
     off();
     if (!u) return;
     await new Promise(r => setTimeout(r, 2500));  // give the ITN a moment to land
-  const snap = await db.ref('dd_gifts').orderByChild('buyerUid').equalTo(u.uid).limitToLast(1).get().catch(() => null);
+  const snap = await db.ref(`dd_my_gifts/${u.uid}`).get().catch(() => null);
   const v = snap && snap.val();
   if (v) {
-    const code = Object.keys(v)[0];
+    const code = Object.entries(v).sort((a, b) => b[1] - a[1])[0][0];
     $('#codeOut').textContent = code;
     $('#codeShare').onclick = () => {
       const text = `I bought you Destroying Desmond. Unlock it at ${location.origin}${location.pathname} with code ${code}`;
