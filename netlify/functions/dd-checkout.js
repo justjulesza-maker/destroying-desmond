@@ -67,144 +67,21 @@ function sign(fields, passphrase) {
 }
 
 exports.handler = async event => {
-  /* ------------------------------------------------------------------
-     TEMPORARY DIAGNOSTIC — visit /.netlify/functions/dd-checkout?debug=1
-     Shows which env vars are actually reaching the function and the exact
-     string being signed. Delete this block once checkout works.
-     ------------------------------------------------------------------ */
-  if (event.httpMethod === 'GET' && (event.queryStringParameters || {}).debug === '1') {
-    const pass = process.env.PAYFAST_PASSPHRASE;
-    const sample = {
-      merchant_id:  process.env.PAYFAST_MERCHANT_ID,
-      merchant_key: process.env.PAYFAST_MERCHANT_KEY,
-      return_url:   'https://example.com/?paid=1',
-      cancel_url:   'https://example.com/?cancelled=1',
-      notify_url:   'https://example.com/.netlify/functions/dd-itn',
-      name_first:   'Julian',
-      email_address:'julian@discovr.tv',
-      m_payment_id: 'dd-test-1',
-      amount:       '59.00',
-      item_name:    'Destroying Desmond - own'
-    };
-    for (const k of Object.keys(sample)) {
-      if (!sample[k]) delete sample[k];
-    }
-    const qs = Object.entries(sample)
-      .map(([k, v]) => `${k}=${encodeURIComponent(String(v).trim()).replace(/%20/g, '+')}`)
-      .join('&');
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        env: {
-          PAYFAST_MERCHANT_ID:  process.env.PAYFAST_MERCHANT_ID  || 'MISSING',
-          PAYFAST_MERCHANT_KEY: process.env.PAYFAST_MERCHANT_KEY || 'MISSING',
-          whitespace_check: (() => {
-            const bad = ['PAYFAST_MERCHANT_ID','PAYFAST_MERCHANT_KEY','PAYFAST_PASSPHRASE']
-              .filter(k => process.env[k] && process.env[k] !== process.env[k].trim());
-            return bad.length ? 'STRAY WHITESPACE ON: ' + bad.join(', ') : 'all clean';
-          })(),
-          PAYFAST_SANDBOX:      process.env.PAYFAST_SANDBOX      || 'MISSING',
-          PAYFAST_PASSPHRASE_set: pass === undefined ? 'NOT SET (good, if PayFast has none)'
-                                 : `SET, length ${pass.length}`,
-          FIREBASE_API_KEY_set:  process.env.FIREBASE_API_KEY  ? 'set' : 'MISSING',
-          FIREBASE_DB_SECRET_set: process.env.FIREBASE_DB_SECRET ? 'set' : 'MISSING'
-        },
-        posting_to: PF_HOST,
-        string_being_signed: qs + (pass ? '&passphrase=<your passphrase>' : ''),
-        signature: sign(sample, pass)
-      }, null, 2)
-    };
-  }
-
-  /* ------------------------------------------------------------------
-     TEMPORARY BISECT PAGE — /.netlify/functions/dd-checkout?test=1
-     Each form adds one more group of fields. Click them in order; the
-     first one that fails identifies the offending field. Delete when done.
-     ------------------------------------------------------------------ */
-  if (event.httpMethod === 'GET' && (event.queryStringParameters || {}).test === '1') {
-    const M = process.env.PAYFAST_MERCHANT_ID;
-    const K = process.env.PAYFAST_MERCHANT_KEY;
-    const P = process.env.PAYFAST_PASSPHRASE;
-    const site = 'https://destroying-desmond.netlify.app';
-
-    const steps = [
-      ['1. Bare minimum', {
-        merchant_id: M, merchant_key: K, amount: '59.00', item_name: 'Test'
-      }],
-      ['2. + URLs', {
-        merchant_id: M, merchant_key: K,
-        return_url: site + '/', cancel_url: site + '/',
-        notify_url: site + '/.netlify/functions/dd-itn',
-        amount: '59.00', item_name: 'Test'
-      }],
-      ['3. + URLs with query strings', {
-        merchant_id: M, merchant_key: K,
-        return_url: site + '/?paid=1', cancel_url: site + '/?cancelled=1',
-        notify_url: site + '/.netlify/functions/dd-itn',
-        amount: '59.00', item_name: 'Test'
-      }],
-      ['4. + buyer name and email', {
-        merchant_id: M, merchant_key: K,
-        return_url: site + '/?paid=1', cancel_url: site + '/?cancelled=1',
-        notify_url: site + '/.netlify/functions/dd-itn',
-        name_first: 'Julian', name_last: 'von Plato',
-        email_address: 'julian@discovr.tv',
-        amount: '59.00', item_name: 'Test'
-      }],
-      ['5. + payment id and real item name', {
-        merchant_id: M, merchant_key: K,
-        return_url: site + '/?paid=1', cancel_url: site + '/?cancelled=1',
-        notify_url: site + '/.netlify/functions/dd-itn',
-        name_first: 'Julian', name_last: 'von Plato',
-        email_address: 'julian@discovr.tv',
-        m_payment_id: 'dd-test-' + Date.now().toString(36),
-        amount: '59.00', item_name: 'Destroying Desmond - own'
-      }],
-      ['6. + custom fields (the full payload)', {
-        merchant_id: M, merchant_key: K,
-        return_url: site + '/?paid=1', cancel_url: site + '/?cancelled=1',
-        notify_url: site + '/.netlify/functions/dd-itn',
-        name_first: 'Julian', name_last: 'von Plato',
-        email_address: 'julian@discovr.tv',
-        m_payment_id: 'dd-test-' + Date.now().toString(36),
-        amount: '59.00', item_name: 'Destroying Desmond - own',
-        custom_str1: 'LGANwGT28XPHyESixxX7yZiV1UQ2',
-        custom_str2: 'own', custom_str3: 'pearl-thusi',
-        custom_str4: 'destroying-desmond'
-      }]
-    ];
-
-    const html = steps.map(([label, f]) => {
-      for (const k of Object.keys(f)) f[k] = String(f[k]).trim();
-      const sig = sign(f, P);
-      const inputs = Object.entries(f)
-        .map(([k, v]) => `<input type="hidden" name="${k}" value="${String(v).replace(/"/g, '&quot;')}">`)
-        .join('') + `<input type="hidden" name="signature" value="${sig}">`;
-      return `<form method="POST" action="${PF_HOST}" target="_blank">
-        ${inputs}<button>${label}</button></form>`;
-    }).join('');
-
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'text/html' },
-      body: `<!doctype html><meta name=viewport content="width=device-width,initial-scale=1">
-        <style>body{font:16px system-ui;max-width:640px;margin:40px auto;padding:0 20px}
-        button{display:block;width:100%;padding:15px;margin:10px 0;font:inherit;cursor:pointer;
-        border:1px solid #ccc;border-radius:6px;background:#fff;text-align:left}
-        button:hover{border-color:#333}</style>
-        <h2>PayFast bisect</h2>
-        <p>Click each in order. Each opens a new tab. Tell me the number of the
-        <b>first one that shows the signature error</b>.</p>
-        ${html}`
-    };
-  }
-
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'POST only' };
   try {
     const { token, filmId, tier, ref, giftTo, giftMsg, returnUrl } = JSON.parse(event.body || '{}');
     if (!token || !filmId || !['stream', 'own', 'gift'].includes(tier))
       return { statusCode: 400, body: 'bad request' };
+
+    // "Who's it for" is a name, not an email. An email here ends up looking like
+    // buyer data to PayFast and trips its same-account check with a baffling error.
+    if (tier === 'gift' && giftTo && /\S+@\S+\.\S+/.test(giftTo)) {
+      return {
+        statusCode: 400,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: "Use their name, not an email address — you'll get a code to send them yourself." })
+      };
+    }
 
     const user = await verify(token);
     const cfg  = await dbGet('dd_config') || {};
