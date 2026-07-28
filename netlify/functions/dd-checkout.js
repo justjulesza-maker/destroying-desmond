@@ -61,6 +61,51 @@ function sign(fields, passphrase) {
 }
 
 exports.handler = async event => {
+  /* ------------------------------------------------------------------
+     TEMPORARY DIAGNOSTIC — visit /.netlify/functions/dd-checkout?debug=1
+     Shows which env vars are actually reaching the function and the exact
+     string being signed. Delete this block once checkout works.
+     ------------------------------------------------------------------ */
+  if (event.httpMethod === 'GET' && (event.queryStringParameters || {}).debug === '1') {
+    const pass = process.env.PAYFAST_PASSPHRASE;
+    const sample = {
+      merchant_id:  process.env.PAYFAST_MERCHANT_ID,
+      merchant_key: process.env.PAYFAST_MERCHANT_KEY,
+      return_url:   'https://example.com/?paid=1',
+      cancel_url:   'https://example.com/?cancelled=1',
+      notify_url:   'https://example.com/.netlify/functions/dd-itn',
+      name_first:   'Julian',
+      email_address:'julian@discovr.tv',
+      m_payment_id: 'dd-test-1',
+      amount:       '59.00',
+      item_name:    'Destroying Desmond - own'
+    };
+    for (const k of Object.keys(sample)) {
+      if (!sample[k]) delete sample[k];
+    }
+    const qs = Object.entries(sample)
+      .map(([k, v]) => `${k}=${encodeURIComponent(String(v).trim()).replace(/%20/g, '+')}`)
+      .join('&');
+    return {
+      statusCode: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        env: {
+          PAYFAST_MERCHANT_ID:  process.env.PAYFAST_MERCHANT_ID  || 'MISSING',
+          PAYFAST_MERCHANT_KEY: process.env.PAYFAST_MERCHANT_KEY || 'MISSING',
+          PAYFAST_SANDBOX:      process.env.PAYFAST_SANDBOX      || 'MISSING',
+          PAYFAST_PASSPHRASE_set: pass === undefined ? 'NOT SET (good, if PayFast has none)'
+                                 : `SET, length ${pass.length}`,
+          FIREBASE_API_KEY_set:  process.env.FIREBASE_API_KEY  ? 'set' : 'MISSING',
+          FIREBASE_DB_SECRET_set: process.env.FIREBASE_DB_SECRET ? 'set' : 'MISSING'
+        },
+        posting_to: PF_HOST,
+        string_being_signed: qs + (pass ? '&passphrase=<your passphrase>' : ''),
+        signature: sign(sample, pass)
+      }, null, 2)
+    };
+  }
+
   if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'POST only' };
   try {
     const { token, filmId, tier, ref, giftTo, giftMsg, returnUrl } = JSON.parse(event.body || '{}');
