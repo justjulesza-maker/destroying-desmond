@@ -92,16 +92,22 @@ exports.handler = async event => {
       return_url:   `${base}?paid=1`,
       cancel_url:   `${base}?cancelled=1`,
       notify_url:   `${new URL(base).origin}/.netlify/functions/dd-itn`,
-      name_first:   (user.displayName || 'Viewer').slice(0, 40),
+      name_first:   (user.displayName || 'Viewer').replace(/[^\x20-\x7E]/g, '').slice(0, 40).trim() || 'Viewer',
       email_address: user.email || '',
       m_payment_id: mPaymentId,
       amount:       Number(amount).toFixed(2),
-      item_name:    `Destroying Desmond — ${tier}`,
+      item_name:    `Destroying Desmond - ${tier}`,   // plain ASCII: non-ASCII risks an encoding mismatch
       custom_str1:  user.localId,
       custom_str2:  tier,
       custom_str3:  ref || '',
       custom_str4:  filmId
     };
+
+    // PayFast signs exactly what it receives, so drop empty fields from the payload
+    // BEFORE signing. Submitting a field we didn't sign is a guaranteed mismatch.
+    for (const k of Object.keys(fields)) {
+      if (fields[k] === '' || fields[k] === null || fields[k] === undefined) delete fields[k];
+    }
 
     fields.signature = sign(fields, process.env.PAYFAST_PASSPHRASE);
 
