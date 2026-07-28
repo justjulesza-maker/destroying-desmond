@@ -91,13 +91,13 @@ a.copy{color:var(--sodium);font-size:12px}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
 <script>
 firebase.initializeApp({
-  apiKey:            "AIzaSyCQlHW08a2J3HJRKZr83HhkGS_-wJKbegA",
+  apiKey:            "PASTE_FROM_4FLIEKS_INDEX",
   authDomain:        "flieks-app.firebaseapp.com",
   databaseURL:       "https://flieks-app-default-rtdb.firebaseio.com",
   projectId:         "flieks-app",
   storageBucket:     "flieks-app.firebasestorage.app",
-  messagingSenderId: "392470139152",
-  appId:             "1:392470139152:web:586fa5b8cf3a43acaf9595"
+  messagingSenderId: "PASTE_FROM_4FLIEKS_INDEX",
+  appId:             "PASTE_FROM_4FLIEKS_INDEX"
 });
 const auth = firebase.auth(), db = firebase.database(), store = firebase.storage();
 const FILM_ID = 'destroying-desmond';
@@ -269,6 +269,21 @@ function drawMedia() {
   </div>
 
   <div class="panel">
+    <h2>Link preview image <span class="pill ${c.ogImage ? 'live' : ''}">${c.ogImage ? 'uploaded' : 'missing'}</span></h2>
+    <div class="hint" style="color:var(--haze);font-size:12px;margin-bottom:12px">
+      1200&times;630 landscape JPG. This is the card people see when the link is posted to
+      Instagram, WhatsApp or X &mdash; for most viewers it's the first thing they see.
+      Keep any text well inside the middle; platforms crop the edges differently.
+      <b style="color:var(--bone)">After uploading, paste the URL into the two
+      <code>PASTE_OG_IMAGE_URL_HERE</code> slots near the top of index.html.</b>
+      It can't be read from here automatically &mdash; the crawlers that build those
+      cards don't run JavaScript.</div>
+    <div class="f"><label>Image URL</label><input id="ogImage" value="${esc(c.ogImage)}"></div>
+    ${c.ogImage ? `<img class="thumb" style="width:100%;max-width:340px;height:auto;aspect-ratio:1200/630" src="${esc(c.ogImage)}">` : ''}
+    <div id="upOg" class="drop" style="margin-top:10px">Drop the preview image<small>1200 &times; 630 JPG</small><div class="prog"><i></i></div></div>
+  </div>
+
+  <div class="panel">
     <h2>The film itself <span class="pill ${PRIV.videoUrl ? 'live' : ''}">${PRIV.videoUrl ? 'uploaded' : 'missing'}</span></h2>
     <div class="hint" style="color:var(--haze);font-size:12px;margin-bottom:12px">
       Stored privately. Only accounts that have paid ever receive this URL.</div>
@@ -282,12 +297,14 @@ function drawMedia() {
   uploader('upPoster', 'dd/poster', u => { $('#posterUrl').value = u; });
   uploader('upStill', 'dd/still', u => { $('#stillUrl').value = u; });
   uploader('upFilm', `dd/film/${FILM_ID}`, u => { $('#videoUrl').value = u; }, 'video/*');
+  uploader('upOg', 'dd/og-image', u => { $('#ogImage').value = u; });
 
   $('#save').onclick = async () => {
     const patch = {
       trailerUrl: $('#trailerUrl').value.trim(),
       posterUrl: $('#posterUrl').value.trim(),
-      stillUrl: $('#stillUrl').value.trim()
+      stillUrl: $('#stillUrl').value.trim(),
+      ogImage: $('#ogImage').value.trim()
     };
     Object.assign(CFG, patch);
     const m = $('#msg'); m.className = 'msg'; m.textContent = 'Saving…';
