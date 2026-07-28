@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Destroying Desmond — manage</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#17131F;--pitch:#0D0A13;--slab:#231C30;--slab2:#2C2440;--sodium:#F0A82E;--bone:#EDE7DB;--haze:#9A90AD;
+--line:rgba(237,231,219,.13);--fd:'Anton',sans-serif;--fb:'Sora',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ink);color:var(--bone);font-family:var(--fb);font-weight:300;font-size:15px;line-height:1.55;padding:24px}
+.wrap{max-width:900px;margin:0 auto}
+h1{font-family:var(--fd);font-size:32px;text-transform:uppercase;font-weight:400;line-height:1}
+.sub{color:var(--haze);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-top:7px}
+h2{font-family:var(--fd);font-size:20px;text-transform:uppercase;font-weight:400;letter-spacing:.02em;margin-bottom:4px}
+.tabs{display:flex;gap:4px;margin:26px 0 22px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:11px 16px;cursor:pointer;
+font-family:var(--fd);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--haze)}
+.tabs button.on{color:var(--bone);border-bottom-color:var(--sodium)}
+.panel{background:var(--slab);border:1px solid var(--line);border-radius:3px;padding:22px;margin-bottom:16px}
+.f{margin-bottom:15px}
+.f label{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--haze);margin-bottom:6px}
+.f .hint{font-size:12px;color:var(--haze);margin-top:5px;letter-spacing:0;text-transform:none}
+input,textarea,select{width:100%;background:var(--pitch);border:1px solid var(--line);border-radius:2px;
+padding:11px 12px;color:var(--bone);font:inherit;font-size:14px}
+input:focus,textarea:focus{border-color:var(--sodium);outline:none}
+textarea{resize:vertical}
+.grid{display:grid;gap:15px;grid-template-columns:1fr 1fr}
+.grid3{display:grid;gap:15px;grid-template-columns:1fr 1fr 1fr}
+@media(max-width:640px){.grid,.grid3{grid-template-columns:1fr}}
+button.act{background:var(--sodium);border:0;color:var(--pitch);font-family:var(--fd);letter-spacing:.14em;
+text-transform:uppercase;padding:12px 22px;border-radius:2px;cursor:pointer;font-size:13px}
+button.act:disabled{opacity:.45;cursor:not-allowed}
+button.ghost{background:none;border:1px solid var(--line);color:var(--haze);padding:8px 14px;font-size:11px;
+font-family:var(--fd);letter-spacing:.14em;text-transform:uppercase;border-radius:2px;cursor:pointer}
+button.ghost:hover{border-color:var(--sodium);color:var(--sodium)}
+button.danger:hover{border-color:#FF7A6E;color:#FF7A6E}
+.bar{position:sticky;bottom:0;background:rgba(23,19,31,.95);backdrop-filter:blur(12px);border-top:1px solid var(--line);
+padding:14px 0;margin-top:20px;display:flex;gap:14px;align-items:center}
+.msg{font-size:13px;color:var(--haze)}
+.msg.ok{color:#7ED9A8}.msg.bad{color:#FF7A6E}
+.drop{border:1px dashed var(--line);border-radius:3px;padding:22px;text-align:center;cursor:pointer;transition:border-color .2s}
+.drop:hover,.drop.over{border-color:var(--sodium)}
+.drop small{display:block;color:var(--haze);font-size:12px;margin-top:5px}
+.prog{height:3px;background:var(--slab2);border-radius:2px;margin-top:10px;overflow:hidden;display:none}
+.prog i{display:block;height:100%;background:var(--sodium);width:0}
+.thumb{width:70px;height:70px;object-fit:cover;border-radius:3px;border:1px solid var(--line);background:var(--pitch)}
+.castrow{display:grid;grid-template-columns:70px 1fr auto;gap:14px;align-items:start;padding:16px 0;border-bottom:1px solid var(--line)}
+.castrow:last-child{border-bottom:0}
+.nm{font-family:var(--fd);font-size:17px;text-transform:uppercase;letter-spacing:.03em}
+.sl{font-size:11px;color:var(--haze);margin-top:3px}
+.gate{max-width:340px;margin:14vh auto}
+.rev{border-bottom:1px solid var(--line);padding:15px 0}
+.rev:last-child{border-bottom:0}
+.stars{color:var(--sodium);letter-spacing:2px;font-size:13px}
+.pill{display:inline-block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:3px 8px;
+border-radius:100px;border:1px solid var(--line);color:var(--haze);margin-left:8px}
+.pill.live{border-color:var(--sodium);color:var(--sodium)}
+.kv{display:grid;grid-template-columns:1fr 2fr auto;gap:9px;margin-bottom:9px}
+a.copy{color:var(--sodium);font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="gate panel" id="gate">
+    <h2>Manage</h2>
+    <p class="sub" style="margin-bottom:18px">Destroying Desmond · admin only</p>
+    <div class="f"><input id="em" type="email" placeholder="Email" autocomplete="email"></div>
+    <div class="f"><input id="pw" type="password" placeholder="Password" autocomplete="current-password"></div>
+    <button class="act" id="go" style="width:100%">Sign in</button>
+    <div class="msg bad" id="gerr" style="margin-top:10px"></div>
+  </div>
+
+  <div id="app" style="display:none">
+    <h1>Manage the film</h1>
+    <p class="sub">Everything on the page comes from here</p>
+    <div class="tabs">
+      <button class="on" data-t="film">Film</button>
+      <button data-t="media">Media</button>
+      <button data-t="cast">Cast</button>
+      <button data-t="reviews">Reviews</button>
+    </div>
+    <div id="view"></div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:            "PASTE_FROM_4FLIEKS_INDEX",
+  authDomain:        "flieks-app.firebaseapp.com",
+  databaseURL:       "https://flieks-app-default-rtdb.firebaseio.com",
+  projectId:         "flieks-app",
+  storageBucket:     "flieks-app.firebasestorage.app",
+  messagingSenderId: "PASTE_FROM_4FLIEKS_INDEX",
+  appId:             "PASTE_FROM_4FLIEKS_INDEX"
+});
+const auth = firebase.auth(), db = firebase.database(), store = firebase.storage();
+const FILM_ID = 'destroying-desmond';
+const $ = s => document.querySelector(s);
+const esc = s => { const d = document.createElement('div'); d.textContent = s ?? ''; return d.innerHTML; };
+const slugify = s => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+let CFG = {}, CAST = {}, PRIV = {}, REVS = {}, TAB = 'film';
+
+/* ---------- auth ---------- */
+$('#go').onclick = async () => {
+  $('#gerr').textContent = '';
+  try { await auth.signInWithEmailAndPassword($('#em').value.trim(), $('#pw').value); }
+  catch { $('#gerr').textContent = 'Sign-in failed.'; }
+};
+
+auth.onAuthStateChanged(async u => {
+  if (!u) { $('#gate').style.display = ''; $('#app').style.display = 'none'; return; }
+  const token = await u.getIdToken(true);
+  const me = await fetch(`https://flieks-app-default-rtdb.firebaseio.com/flieks_users/${u.uid}.json?auth=${token}`)
+    .then(r => r.json()).catch(() => null);
+  if (!me || me.role !== 'admin') { $('#gerr').textContent = 'Not an admin account.'; auth.signOut(); return; }
+  $('#gate').style.display = 'none'; $('#app').style.display = '';
+  await loadAll();
+  draw();
+});
+
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('.tabs button').forEach(x => x.classList.remove('on'));
+  b.classList.add('on'); TAB = b.dataset.t; draw();
+});
+
+async function loadAll() {
+  const [a, b, c, d] = await Promise.all([
+    db.ref('dd_config').get(), db.ref('dd_cast').get(),
+    db.ref(`dd_private/${FILM_ID}`).get(), db.ref('dd_reviews').get()
+  ]);
+  CFG = a.val() || {}; CAST = b.val() || {}; PRIV = c.val() || {}; REVS = d.val() || {};
+}
+
+function draw() {
+  ({ film: drawFilm, media: drawMedia, cast: drawCast, reviews: drawReviews })[TAB]();
+}
+
+/* ---------- upload helper ---------- */
+function uploader(id, path, onDone, accept) {
+  const el = $('#' + id);
+  const input = document.createElement('input');
+  input.type = 'file'; input.accept = accept || 'image/*'; input.style.display = 'none';
+  document.body.appendChild(input);
+  const start = file => {
+    if (!file) return;
+    const ext = (file.name.split('.').pop() || 'bin').toLowerCase();
+    const task = store.ref(`${path}.${ext}`).put(file);
+    const p = el.parentElement.querySelector('.prog'); p.style.display = 'block';
+    task.on('state_changed',
+      s => p.querySelector('i').style.width = (s.bytesTransferred / s.totalBytes * 100) + '%',
+      () => { p.style.display = 'none'; alert('Upload failed. Check Storage rules.'); },
+      async () => { p.style.display = 'none'; onDone(await task.snapshot.ref.getDownloadURL()); });
+  };
+  el.onclick = () => input.click();
+  input.onchange = () => start(input.files[0]);
+  el.ondragover = e => { e.preventDefault(); el.classList.add('over'); };
+  el.ondragleave = () => el.classList.remove('over');
+  el.ondrop = e => { e.preventDefault(); el.classList.remove('over'); start(e.dataTransfer.files[0]); };
+}
+
+/* ---------- FILM ---------- */
+function drawFilm() {
+  const c = CFG;
+  $('#view').innerHTML = `
+  <div class="panel">
+    <h2>The basics</h2>
+    <div class="f"><label>Logline</label>
+      <input id="logline" value="${esc(c.logline)}" maxlength="180">
+      <div class="hint">One sentence. This sits under the title and does most of the work.</div></div>
+    <div class="f"><label>Synopsis</label>
+      <textarea id="synopsis" rows="7">${esc(c.synopsis)}</textarea>
+      <div class="hint">Leave a blank line between paragraphs.</div></div>
+    <div class="grid3">
+      <div class="f"><label>Runtime (min)</label><input id="runtime" type="number" value="${c.runtime ?? 14}"></div>
+      <div class="f"><label>Year</label><input id="year" type="number" value="${c.year ?? new Date().getFullYear()}"></div>
+      <div class="f"><label>Stream window (hours)</label><input id="streamHours" type="number" value="${c.streamHours ?? 48}"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Pricing</h2>
+    <div class="grid3">
+      <div class="f"><label>Stream (R)</label><input id="priceStream" type="number" step="1" value="${c.priceStream ?? 35}"></div>
+      <div class="f"><label>Own (R)</label><input id="priceOwn" type="number" step="1" value="${c.priceOwn ?? 89}"></div>
+      <div class="f"><label>Gift (R)</label><input id="priceGift" type="number" step="1" value="${c.priceGift ?? c.priceOwn ?? 89}"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Credits</h2>
+    <div class="hint" style="color:var(--haze);font-size:12px;margin-bottom:12px">Shown as a list beside the synopsis.</div>
+    <div id="kvs"></div>
+    <button class="ghost" id="addKv">Add a credit</button>
+  </div>
+
+  <div class="bar"><button class="act" id="save">Save changes</button><span class="msg" id="msg"></span></div>`;
+
+  const creds = Object.entries(c.credits || { 'Director': '', 'Written by': '', 'Producer': '' });
+  const kvs = $('#kvs');
+  const addRow = (k = '', v = '') => {
+    const d = document.createElement('div'); d.className = 'kv';
+    d.innerHTML = `<input placeholder="Role" value="${esc(k)}"><input placeholder="Name" value="${esc(v)}">
+      <button class="ghost danger">×</button>`;
+    d.querySelector('button').onclick = () => d.remove();
+    kvs.appendChild(d);
+  };
+  creds.forEach(([k, v]) => addRow(k, v));
+  $('#addKv').onclick = () => addRow();
+
+  $('#save').onclick = async () => {
+    const credits = {};
+    [...kvs.children].forEach(r => {
+      const [k, v] = [...r.querySelectorAll('input')].map(i => i.value.trim());
+      if (k) credits[k] = v;
+    });
+    const patch = {
+      logline: $('#logline').value.trim(),
+      synopsis: $('#synopsis').value,
+      runtime: +$('#runtime').value, year: +$('#year').value,
+      streamHours: +$('#streamHours').value,
+      priceStream: +$('#priceStream').value,
+      priceOwn: +$('#priceOwn').value,
+      priceGift: +$('#priceGift').value,
+      credits
+    };
+    await save('dd_config', patch, Object.assign(CFG, patch));
+  };
+}
+
+async function save(path, patch, local) {
+  const m = $('#msg'); m.className = 'msg'; m.textContent = 'Saving…';
+  try { await db.ref(path).update(patch); m.className = 'msg ok'; m.textContent = 'Saved. Reload the film page to see it.'; }
+  catch (e) { m.className = 'msg bad'; m.textContent = 'Could not save — check you are signed in as admin.'; }
+}
+
+/* ---------- MEDIA ---------- */
+function drawMedia() {
+  const c = CFG;
+  $('#view').innerHTML = `
+  <div class="panel">
+    <h2>Trailer</h2>
+    <div class="f"><label>Trailer URL</label>
+      <input id="trailerUrl" value="${esc(c.trailerUrl)}" placeholder="https://youtu.be/… or a Storage URL">
+      <div class="hint">A YouTube link embeds automatically. Unlisted works fine. Otherwise upload below.</div></div>
+    <div id="upTrailer" class="drop">Drop a trailer file<small>or click to choose · MP4</small><div class="prog"><i></i></div></div>
+  </div>
+
+  <div class="panel">
+    <h2>Poster and still</h2>
+    <div class="grid">
+      <div>
+        <div class="f"><label>Poster · 9:16</label><input id="posterUrl" value="${esc(c.posterUrl)}"></div>
+        ${c.posterUrl ? `<img class="thumb" style="width:80px;height:142px" src="${esc(c.posterUrl)}">` : ''}
+        <div id="upPoster" class="drop" style="margin-top:10px">Drop poster<small>JPG or PNG</small><div class="prog"><i></i></div></div>
+      </div>
+      <div>
+        <div class="f"><label>Still · 16:9</label><input id="stillUrl" value="${esc(c.stillUrl)}"></div>
+        ${c.stillUrl ? `<img class="thumb" style="width:142px;height:80px" src="${esc(c.stillUrl)}">` : ''}
+        <div id="upStill" class="drop" style="margin-top:10px">Drop still<small>used as the video poster frame</small><div class="prog"><i></i></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>The film itself <span class="pill ${PRIV.videoUrl ? 'live' : ''}">${PRIV.videoUrl ? 'uploaded' : 'missing'}</span></h2>
+    <div class="hint" style="color:var(--haze);font-size:12px;margin-bottom:12px">
+      Stored privately. Only accounts that have paid ever receive this URL.</div>
+    <div class="f"><label>Feature file URL</label><input id="videoUrl" value="${esc(PRIV.videoUrl)}"></div>
+    <div id="upFilm" class="drop">Drop the feature<small>MP4 · large files take a while, keep this tab open</small><div class="prog"><i></i></div></div>
+  </div>
+
+  <div class="bar"><button class="act" id="save">Save changes</button><span class="msg" id="msg"></span></div>`;
+
+  uploader('upTrailer', 'dd/trailer', u => { $('#trailerUrl').value = u; }, 'video/*');
+  uploader('upPoster', 'dd/poster', u => { $('#posterUrl').value = u; });
+  uploader('upStill', 'dd/still', u => { $('#stillUrl').value = u; });
+  uploader('upFilm', `dd/film/${FILM_ID}`, u => { $('#videoUrl').value = u; }, 'video/*');
+
+  $('#save').onclick = async () => {
+    const patch = {
+      trailerUrl: $('#trailerUrl').value.trim(),
+      posterUrl: $('#posterUrl').value.trim(),
+      stillUrl: $('#stillUrl').value.trim()
+    };
+    Object.assign(CFG, patch);
+    const m = $('#msg'); m.className = 'msg'; m.textContent = 'Saving…';
+    try {
+      await db.ref('dd_config').update(patch);
+      await db.ref(`dd_private/${FILM_ID}`).update({ videoUrl: $('#videoUrl').value.trim() });
+      PRIV.videoUrl = $('#videoUrl').value.trim();
+      m.className = 'msg ok'; m.textContent = 'Saved.';
+    } catch { m.className = 'msg bad'; m.textContent = 'Could not save.'; }
+  };
+}
+
+/* ---------- CAST ---------- */
+function drawCast() {
+  const rows = Object.entries(CAST).sort((a, b) => (a[1].order ?? 99) - (b[1].order ?? 99));
+  $('#view').innerHTML = `
+  <div class="panel">
+    <h2>Cast <span class="pill">${rows.length}</span></h2>
+    <div class="hint" style="color:var(--haze);font-size:12px;margin:6px 0 14px">
+      Each person gets their own link. Order controls where they sit in the billing block.</div>
+    <div id="list">${rows.length ? rows.map(([slug, c]) => `
+      <div class="castrow">
+        <img class="thumb" src="${esc(c.photoUrl || '')}">
+        <div>
+          <div class="nm">${esc(c.name)}</div>
+          <div class="sl">${esc(c.role || '')} · ?a=${esc(slug)} ${c.reach ? '· ' + esc(c.reach) : ''}</div>
+          <a class="copy" href="#" data-link="${esc(slug)}">Copy their link</a>
+        </div>
+        <div style="display:flex;gap:6px;flex-direction:column">
+          <button class="ghost" data-edit="${esc(slug)}">Edit</button>
+          <button class="ghost danger" data-del="${esc(slug)}">Delete</button>
+        </div>
+      </div>`).join('') : '<p style="color:var(--haze)">Nobody yet. Add the first name below.</p>'}</div>
+  </div>
+  <button class="act" id="addNew">Add a cast member</button>
+  <div id="editor"></div>`;
+
+  document.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => castForm(b.dataset.edit));
+  document.querySelectorAll('[data-link]').forEach(a => a.onclick = e => {
+    e.preventDefault();
+    navigator.clipboard.writeText(`${location.origin}/?a=${a.dataset.link}`);
+    a.textContent = 'Copied'; setTimeout(() => a.textContent = 'Copy their link', 1500);
+  });
+  document.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => {
+    if (!confirm(`Remove ${CAST[b.dataset.del].name} from the cast? Their tracked clicks and sales stay in the stats.`)) return;
+    await db.ref(`dd_cast/${b.dataset.del}`).remove();
+    delete CAST[b.dataset.del]; drawCast();
+  });
+  $('#addNew').onclick = () => castForm(null);
+}
+
+function castForm(slug) {
+  const c = slug ? CAST[slug] : {};
+  $('#editor').innerHTML = `
+  <div class="panel" style="margin-top:16px;border-color:var(--sodium)">
+    <h2>${slug ? 'Edit ' + esc(c.name) : 'New cast member'}</h2>
+    <div class="grid">
+      <div class="f"><label>Name</label><input id="cName" value="${esc(c.name)}"></div>
+      <div class="f"><label>Character</label><input id="cRole" value="${esc(c.role)}"></div>
+    </div>
+    <div class="grid3">
+      <div class="f"><label>Link slug</label><input id="cSlug" value="${esc(slug || '')}" ${slug ? 'disabled' : ''}>
+        <div class="hint">${slug ? 'Fixed once created — changing it would break links already out there.' : 'Fills in from the name.'}</div></div>
+      <div class="f"><label>Billing order</label><input id="cOrder" type="number" value="${c.order ?? Object.keys(CAST).length + 1}"></div>
+      <div class="f"><label>Following</label><input id="cReach" value="${esc(c.reach)}" placeholder="2.1M"></div>
+    </div>
+    <div class="f"><label>Photo</label><input id="cPhoto" value="${esc(c.photoUrl)}"></div>
+    <div id="upFace" class="drop">Drop a headshot<small>square works best</small><div class="prog"><i></i></div></div>
+    <div class="grid" style="margin-top:15px">
+      <div class="f"><label>Instagram</label><input id="cIg" value="${esc(c.instagram)}" placeholder="https://instagram.com/…"></div>
+      <div class="f"><label>TikTok</label><input id="cTt" value="${esc(c.tiktok)}" placeholder="https://tiktok.com/@…"></div>
+      <div class="f"><label>X</label><input id="cX" value="${esc(c.x)}"></div>
+      <div class="f"><label>YouTube</label><input id="cYt" value="${esc(c.youtube)}"></div>
+    </div>
+    <div class="bar"><button class="act" id="cSave">${slug ? 'Save' : 'Add to cast'}</button>
+      <button class="ghost" id="cCancel">Cancel</button><span class="msg" id="msg"></span></div>
+  </div>`;
+  $('#editor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  if (!slug) $('#cName').oninput = () => $('#cSlug').value = slugify($('#cName').value);
+  uploader('upFace', `dd/cast/${slug || 'tmp-' + Date.now()}`, u => { $('#cPhoto').value = u; });
+  $('#cCancel').onclick = () => $('#editor').innerHTML = '';
+
+  $('#cSave').onclick = async () => {
+    const key = slug || slugify($('#cSlug').value || $('#cName').value);
+    const m = $('#msg');
+    if (!key || !$('#cName').value.trim()) { m.className = 'msg bad'; m.textContent = 'Name is required.'; return; }
+    if (!slug && CAST[key]) { m.className = 'msg bad'; m.textContent = 'That slug is taken. Change it.'; return; }
+    const data = {
+      name: $('#cName').value.trim(), role: $('#cRole').value.trim(),
+      order: +$('#cOrder').value || 99, reach: $('#cReach').value.trim(),
+      photoUrl: $('#cPhoto').value.trim(),
+      instagram: $('#cIg').value.trim(), tiktok: $('#cTt').value.trim(),
+      x: $('#cX').value.trim(), youtube: $('#cYt').value.trim()
+    };
+    m.className = 'msg'; m.textContent = 'Saving…';
+    try {
+      await db.ref(`dd_cast/${key}`).update(data);
+      CAST[key] = Object.assign(CAST[key] || {}, data);
+      $('#editor').innerHTML = ''; drawCast();
+    } catch { m.className = 'msg bad'; m.textContent = 'Could not save.'; }
+  };
+}
+
+/* ---------- REVIEWS ---------- */
+function drawReviews() {
+  const rows = Object.entries(REVS).sort((a, b) => b[1].createdAt - a[1].createdAt);
+  const pending = rows.filter(([, r]) => !r.approved);
+  const live = rows.filter(([, r]) => r.approved);
+  const card = ([id, r], isLive) => `
+    <div class="rev">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <strong style="font-family:var(--fd);font-size:14px;letter-spacing:.08em;text-transform:uppercase">${esc(r.name || 'Viewer')}</strong>
+        <span class="stars">${'★'.repeat(r.rating || 0)}${'☆'.repeat(5 - (r.rating || 0))}</span>
+        ${r.ref ? `<span class="pill">via ${esc(r.ref)}</span>` : ''}
+        <span style="margin-left:auto;display:flex;gap:6px">
+          ${isLive ? `<button class="ghost" data-hide="${id}">Hide</button>`
+                   : `<button class="ghost" data-ok="${id}">Approve</button>`}
+          <button class="ghost danger" data-rm="${id}">Delete</button>
+        </span>
+      </div>
+      <p style="font-size:14px;margin-top:7px">${esc(r.body)}</p>
+    </div>`;
+
+  $('#view').innerHTML = `
+  <div class="panel">
+    <h2>Waiting for you <span class="pill ${pending.length ? 'live' : ''}">${pending.length}</span></h2>
+    <div style="margin-top:8px">${pending.length ? pending.map(r => card(r, false)).join('')
+      : '<p style="color:var(--haze)">Nothing pending.</p>'}</div>
+  </div>
+  <div class="panel">
+    <h2>Live on the page <span class="pill">${live.length}</span></h2>
+    <div style="margin-top:8px">${live.length ? live.map(r => card(r, true)).join('')
+      : '<p style="color:var(--haze)">None approved yet.</p>'}</div>
+  </div>`;
+
+  const act = async (sel, fn) => document.querySelectorAll(sel).forEach(b => b.onclick = async () => {
+    await fn(b.dataset.ok || b.dataset.hide || b.dataset.rm);
+    await loadAll(); drawReviews();
+  });
+  act('[data-ok]',   id => db.ref(`dd_reviews/${id}/approved`).set(true));
+  act('[data-hide]', id => db.ref(`dd_reviews/${id}/approved`).set(false));
+  act('[data-rm]',   id => confirm('Delete this review permanently?')
+        ? db.ref(`dd_reviews/${id}`).remove() : Promise.resolve());
+}
+</script>
+</body>
+</html>
