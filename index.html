@@ -934,7 +934,16 @@ function startBuy(tier) {
 
 $('#payGo').onclick = async () => {
   const tier = $('#payGo').dataset.tier;
-  $('#payGo').disabled = true; $('#buyErr').textContent = '';
+  $('#buyErr').textContent = '';
+  if (tier === 'gift') {
+    const to = $('#gName').value.trim();
+    if (!to) { $('#buyErr').textContent = 'Who is this for? Their name is enough.'; return; }
+    if (/\S+@\S+\.\S+/.test(to)) {
+      $('#buyErr').textContent = "Their name, not an email — you'll get a code to send them yourself.";
+      return;
+    }
+  }
+  $('#payGo').disabled = true;
   try {
     const body = {
       token: await USER.getIdToken(true),
@@ -948,7 +957,12 @@ $('#payGo').onclick = async () => {
     const r = await fetch('/.netlify/functions/dd-checkout', {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
     });
-    if (!r.ok) throw new Error(await r.text());
+    if (!r.ok) {
+      const raw = await r.text();
+      let msg = raw;
+      try { msg = JSON.parse(raw).message || raw; } catch {}
+      throw new Error(`${r.status}: ${msg}`);
+    }
     const { action, fields } = await r.json();
 
     // hand off to PayFast
@@ -959,7 +973,8 @@ $('#payGo').onclick = async () => {
     });
     document.body.appendChild(f); f.submit();
   } catch (e) {
-    $('#buyErr').textContent = 'Checkout could not start. Try again in a moment.';
+    $('#buyErr').textContent = 'Checkout could not start — ' + (e.message || 'unknown error');
+    console.error('checkout failed:', e);
     $('#payGo').disabled = false;
   }
 };
