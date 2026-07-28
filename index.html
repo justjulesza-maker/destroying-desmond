@@ -4,20 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Destroying Desmond — a feature film</title>
-<meta name="description" content="A South African feature film. Watch the trailer free. Stream it, own it, or send it to a friend.">
+<meta name="description" content="Three exes. One curse. Zero chill. A South African feature film. Watch the trailer free. Stream it, own it, or send it to a friend.">
+
 <!-- ============================================================
      LINK PREVIEW (Open Graph + Twitter Card)
-     These are read by a crawler that does NOT run JavaScript, so they
-     must be hard-coded here — they can't be pulled from dd_config.
-     Upload a 1200x630 JPG via the CMS (Media tab), copy the URL it gives
-     you, and paste it into BOTH og:image and twitter:image below.
+     Read by crawlers that do NOT run JavaScript, so hard-coded here.
+     Upload a 1200x630 JPG via the CMS Media tab and paste the URL
+     into BOTH og:image and twitter:image below.
      ============================================================ -->
 <meta property="og:site_name" content="Destroying Desmond">
 <meta property="og:title" content="Destroying Desmond">
-<meta property="og:description" content="A South African feature film. Watch the trailer free.">
+<meta property="og:description" content="Three exes. One curse. Zero chill.">
 <meta property="og:type" content="video.movie">
 <meta property="og:url" content="https://destroying-desmond.netlify.app/">
-<meta property="og:image" content="https://firebasestorage.googleapis.com/v0/b/flieks-app.firebasestorage.app/o/dd%2Fog-image.png?alt=media&token=9ddae1d4-b8d8-4402-a6a6-b3da1ca08ef0">
+<meta property="og:image" content="PASTE_OG_IMAGE_URL_HERE">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Destroying Desmond - a feature film">
@@ -25,355 +25,432 @@
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Destroying Desmond">
-<meta name="twitter:description" content="A South African feature film. Watch the trailer free.">
+<meta name="twitter:description" content="Three exes. One curse. Zero chill.">
 <meta name="twitter:image" content="PASTE_OG_IMAGE_URL_HERE">
-<meta name="theme-color" content="#17131F">
+
+<meta name="theme-color" content="#EDE7DD">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@500;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   DESTROYING DESMOND — white-label film page, powered by 4flieks
-   Palette: sodium-vapour night. Ink aubergine, amber, bone.
-   Display: Anton (billing-block condensed). Body: Sora.
+   DESTROYING DESMOND — powered by 4flieks
+   Torn-paper collage, after the poster: ripped edges, polaroids,
+   pink sticky notes, biro doodles.
+   Anton (heavy display) + Caveat (handwriting) + DM Sans (body)
    ============================================================ */
 :root{
-  --ink:#17131F; --pitch:#0D0A13; --slab:#231C30; --slab-2:#2C2440;
-  --sodium:#F0A82E; --sodium-dim:#8a5f16;
-  --bone:#EDE7DB; --haze:#9A90AD;
-  --line:rgba(237,231,219,.13); --line-2:rgba(237,231,219,.28);
+  --paper:#EDE7DD; --paper-2:#E3DBD0; --paper-3:#F6F2EC;
+  --torn:#1B181C;                     /* the near-black ripped fragments */
+  --pink:#E0559F;                     /* title pink */
+  --pink-2:#F7C4E0;                   /* sticky note */
+  --pink-3:#FBE4F1;
+  --violet:#9E6ABF;
+  --grey:#B3ADA7;                     /* the DESMOND grey */
+  --ink:#211E22; --ink-2:#5A545B;
+  --line:rgba(33,30,34,.16);
   --fd:'Anton',Impact,sans-serif;
-  --fb:'Sora',system-ui,-apple-system,sans-serif;
-  --t-xs:11px; --t-sm:13px; --t-md:15px; --t-lg:18px; --t-xl:24px; --t-2xl:36px;
+  --fh:'Caveat',cursive;
+  --fb:'DM Sans',system-ui,-apple-system,sans-serif;
+  --t-xs:12px; --t-sm:14px; --t-md:16px; --t-lg:18px; --t-xl:24px; --t-2xl:34px;
   --gut:20px; --max:1120px;
   --ease:cubic-bezier(.2,.7,.2,1);
+  --lift:0 10px 26px rgba(33,30,34,.14), 0 2px 6px rgba(33,30,34,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
-  background:var(--ink); color:var(--bone); font-family:var(--fb);
-  font-size:var(--t-md); font-weight:300; line-height:1.6;
+  background:var(--paper); color:var(--ink);
+  font-family:var(--fb); font-size:var(--t-md); line-height:1.6;
   overflow-x:hidden; padding-bottom:env(safe-area-inset-bottom);
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(255,255,255,.7), transparent 42%),
+    radial-gradient(circle at 88% 72%, rgba(200,190,178,.34), transparent 46%);
+}
+/* paper grain */
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E");
 }
 img,video{max-width:100%;display:block}
 button,input,textarea,select{font:inherit;color:inherit}
-a{color:var(--bone);text-decoration:none}
-:focus-visible{outline:2px solid var(--sodium);outline-offset:3px;border-radius:2px}
-.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
+a{color:var(--ink);text-decoration:none}
+:focus-visible{outline:2.5px solid var(--pink);outline-offset:3px;border-radius:2px}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut);position:relative;z-index:2}
 .hide{display:none !important}
+section{padding:64px 0;position:relative}
 
-/* ---- structural type ---- */
-.eyebrow{
-  font-family:var(--fd); font-size:var(--t-xs); letter-spacing:.22em;
-  text-transform:uppercase; color:var(--sodium);
+/* ---------- torn paper ---------- */
+.torn{
+  background:var(--paper-3); box-shadow:var(--lift); position:relative;
+  clip-path:polygon(
+    0% 2%, 4% 0.4%, 9% 1.8%, 15% 0.2%, 22% 1.6%, 29% 0.3%, 36% 1.9%, 44% 0.5%,
+    52% 1.7%, 60% 0.3%, 68% 1.8%, 76% 0.4%, 84% 1.6%, 92% 0.5%, 97% 1.7%, 100% 0.6%,
+    99.3% 8%, 100% 16%, 99.2% 26%, 100% 36%, 99.4% 47%, 100% 58%, 99.3% 70%, 100% 82%, 99.5% 92%, 100% 99.4%,
+    95% 98.4%, 88% 99.7%, 80% 98.3%, 72% 99.6%, 64% 98.4%, 55% 99.7%, 46% 98.5%,
+    38% 99.6%, 30% 98.3%, 22% 99.7%, 14% 98.4%, 7% 99.6%, 2% 98.5%, 0% 99.3%,
+    0.7% 90%, 0% 80%, 0.8% 69%, 0% 57%, 0.6% 45%, 0% 33%, 0.7% 21%, 0% 11%
+  );
 }
-.sec-head{
-  display:flex;align-items:baseline;gap:14px;
-  padding-bottom:14px;margin-bottom:28px;border-bottom:1px solid var(--line);
+.torn-2{
+  clip-path:polygon(
+    0% 1.4%, 6% 0.3%, 13% 1.9%, 21% 0.4%, 30% 1.6%, 39% 0.2%, 48% 1.8%, 58% 0.5%,
+    67% 1.5%, 77% 0.3%, 86% 1.7%, 94% 0.4%, 100% 1.5%,
+    99.4% 12%, 100% 24%, 99.2% 38%, 100% 52%, 99.5% 66%, 100% 80%, 99.3% 91%, 100% 99%,
+    92% 98.2%, 83% 99.6%, 73% 98.4%, 63% 99.7%, 52% 98.3%, 41% 99.6%, 31% 98.4%,
+    20% 99.7%, 10% 98.5%, 3% 99.6%, 0% 98.7%,
+    0.6% 88%, 0% 76%, 0.8% 62%, 0% 48%, 0.7% 34%, 0% 22%, 0.5% 10%
+  );
 }
-.sec-head h2{font-family:var(--fd);font-size:var(--t-2xl);letter-spacing:.01em;line-height:1;font-weight:400}
-.sec-head .count{margin-left:auto;font-size:var(--t-xs);color:var(--haze);letter-spacing:.16em;text-transform:uppercase}
-section{padding:56px 0}
-.muted{color:var(--haze)}
+.tilt-l{transform:rotate(-1.1deg)}
+.tilt-r{transform:rotate(.9deg)}
+.tilt-l2{transform:rotate(-2deg)}
+.tilt-r2{transform:rotate(1.7deg)}
 
-/* ---- nav ---- */
+/* tape */
+.tape{
+  position:absolute;width:104px;height:28px;background:rgba(247,196,224,.72);
+  border-left:1px dashed rgba(255,255,255,.6);border-right:1px dashed rgba(255,255,255,.6);
+  box-shadow:0 1px 3px rgba(33,30,34,.14);z-index:5;
+}
+.tape.tl{top:-12px;left:22px;transform:rotate(-7deg)}
+.tape.tr{top:-13px;right:26px;transform:rotate(6deg)}
+
+/* ---------- headings ---------- */
+.scrawl{font-family:var(--fh);font-weight:700;color:var(--pink)}
+.sec-head{display:flex;align-items:flex-end;gap:14px;margin-bottom:30px;flex-wrap:wrap}
+.sec-head h2{
+  font-family:var(--fd);font-weight:400;font-size:var(--t-2xl);
+  text-transform:uppercase;letter-spacing:.01em;line-height:.95;color:var(--torn)
+}
+.sec-head .kick{font-family:var(--fh);font-size:26px;color:var(--pink);transform:rotate(-4deg);line-height:1}
+.sec-head .count{
+  margin-left:auto;font-size:var(--t-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2)
+}
+.rule{height:2px;background:var(--torn);opacity:.14;margin-bottom:30px}
+
+/* ---------- nav ---------- */
 .nav{
-  position:sticky;top:0;z-index:60;
-  background:rgba(23,19,31,.82);backdrop-filter:blur(14px);
-  border-bottom:1px solid transparent;transition:border-color .3s
+  position:sticky;top:0;z-index:60;background:rgba(237,231,221,.92);
+  backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .3s
 }
 .nav.stuck{border-bottom-color:var(--line)}
-.nav .wrap{display:flex;align-items:center;gap:16px;height:56px}
-.nav .mark{font-family:var(--fd);font-size:var(--t-sm);letter-spacing:.14em;text-transform:uppercase}
-.nav .mark span{color:var(--sodium)}
-.nav .links{display:none;gap:22px;margin-left:auto}
-.nav .links a{font-size:var(--t-xs);letter-spacing:.16em;text-transform:uppercase;color:var(--haze);transition:color .2s}
-.nav .links a:hover{color:var(--bone)}
+.nav .wrap{display:flex;align-items:center;gap:14px;height:58px}
+.nav .mark{display:flex;align-items:baseline;gap:5px;line-height:1}
+.nav .mark .a{font-family:var(--fh);font-weight:700;font-size:22px;color:var(--pink);transform:rotate(-3deg)}
+.nav .mark .b{font-family:var(--fd);font-size:16px;text-transform:uppercase;letter-spacing:.02em;color:var(--torn)}
+.nav .links{display:none;gap:24px;margin-left:auto}
+.nav .links a{font-size:var(--t-xs);letter-spacing:.13em;text-transform:uppercase;font-weight:500;color:var(--ink-2);transition:color .2s}
+.nav .links a:hover{color:var(--pink)}
 .nav .acct{margin-left:auto}
-@media(min-width:860px){.nav .links{display:flex}.nav .acct{margin-left:0}}
+@media(min-width:880px){.nav .links{display:flex}.nav .acct{margin-left:0}}
 
-/* mobile menu */
-.burger{
-  display:inline-flex;flex-direction:column;justify-content:center;gap:5px;
-  width:44px;height:44px;flex:none;padding:0 11px;margin-left:10px;
-  background:none;border:1px solid var(--line);border-radius:2px;cursor:pointer
-}
-.burger span{display:block;height:1.5px;background:var(--bone);
-  transition:transform .25s var(--ease),opacity .18s}
-.burger.on span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
-.burger.on span:nth-child(2){opacity:0}
-.burger.on span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
-.mnav{
-  position:absolute;left:0;right:0;top:100%;
-  background:var(--ink);border-bottom:1px solid var(--line);
-  max-height:0;overflow:hidden;transition:max-height .3s var(--ease)
-}
-.mnav.open{max-height:460px}
-.mnav .in{padding:4px var(--gut) 22px}
-.mnav a{
-  display:block;padding:16px 0;border-bottom:1px solid var(--line);
-  font-family:var(--fd);font-size:var(--t-lg);text-transform:uppercase;letter-spacing:.06em
-}
-.mnav a:last-of-type{border-bottom:0}
-.mnav .btn{width:100%;margin-top:12px}
-@media(min-width:860px){.burger,.mnav{display:none}}
-
-/* ---- buttons ---- */
+/* ---------- buttons ---------- */
 .btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:9px;
-  padding:14px 22px;min-height:48px;border:1px solid var(--line-2);background:transparent;
-  font-family:var(--fd);font-size:var(--t-sm);letter-spacing:.14em;text-transform:uppercase;
-  cursor:pointer;border-radius:2px;transition:background .2s,color .2s,border-color .2s;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:14px 24px;min-height:48px;cursor:pointer;border-radius:3px;
+  font-family:var(--fb);font-weight:700;font-size:var(--t-sm);
+  letter-spacing:.09em;text-transform:uppercase;
+  background:transparent;border:2px solid var(--torn);color:var(--torn);
+  transition:transform .18s var(--ease),background .18s,color .18s,box-shadow .18s
 }
-.btn:hover{border-color:var(--bone)}
-.btn-fill{background:var(--sodium);border-color:var(--sodium);color:var(--pitch)}
-.btn-fill:hover{background:#FFBF50;border-color:#FFBF50}
-.btn-sm{padding:11px 16px;font-size:var(--t-xs);min-height:44px}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.btn-ghost{border-color:var(--line)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 -2px rgba(33,30,34,.2)}
+.btn-fill{background:var(--pink);border-color:var(--pink);color:#fff}
+.btn-fill:hover{background:#d0428f;border-color:#d0428f}
+.btn-dark{background:var(--torn);border-color:var(--torn);color:var(--paper-3)}
+.btn-sm{padding:10px 16px;min-height:44px;font-size:var(--t-xs);border-width:1.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
 
-/* ---- hero ---- */
-.hero{padding:36px 0 8px}
+/* ---------- hero ---------- */
+.hero{padding:30px 0 10px}
 .hero-grid{display:grid;gap:26px}
-@media(min-width:900px){
-  .hero{padding:56px 0 20px}
-  .hero-grid{grid-template-columns:300px 1fr;gap:44px;align-items:start}
+@media(min-width:940px){
+  .hero{padding:52px 0 24px}
+  .hero-grid{grid-template-columns:1fr 300px;gap:46px;align-items:start}
 }
-.poster{
-  aspect-ratio:9/16;background:var(--pitch);border:1px solid var(--line);
-  border-radius:3px;overflow:hidden;position:relative;display:none;
-}
-.poster img{width:100%;height:100%;object-fit:cover}
-@media(min-width:900px){.poster{display:block}}
-
-.player-well{
-  position:relative;background:var(--pitch);border:1px solid var(--line);
-  border-radius:3px;overflow:hidden;aspect-ratio:16/9;
-}
+.player-well{position:relative;background:var(--torn);aspect-ratio:16/9;overflow:hidden;border-radius:2px}
 .player-well video,.player-well iframe{width:100%;height:100%;object-fit:cover;border:0}
-.trailer-badge{
-  position:absolute;top:12px;left:12px;z-index:3;
-  background:rgba(13,10,19,.78);border:1px solid var(--line-2);border-radius:2px;
-  padding:5px 10px;font-family:var(--fd);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+.player-frame{position:relative;padding:11px;background:var(--paper-3);box-shadow:var(--lift)}
+.trailer-flag{
+  position:absolute;top:-14px;left:-10px;z-index:6;background:var(--pink);color:#fff;
+  padding:7px 15px;font-family:var(--fh);font-weight:700;font-size:19px;
+  transform:rotate(-4deg);box-shadow:0 3px 8px rgba(33,30,34,.2);border-radius:2px
 }
 .play-over{
-  position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(to top,rgba(13,10,19,.7),rgba(13,10,19,.15));
-  border:0;cursor:pointer;width:100%;
+  position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(to top,rgba(27,24,28,.55),rgba(27,24,28,.1));border:0;cursor:pointer;width:100%
 }
 .play-over .disc{
-  width:64px;height:64px;border-radius:50%;background:var(--sodium);
-  display:grid;place-items:center;transition:transform .25s var(--ease);
+  width:74px;height:74px;border-radius:50%;background:var(--pink);display:grid;place-items:center;
+  box-shadow:0 6px 20px rgba(224,85,159,.5);transition:transform .25s var(--ease)
 }
-.play-over:hover .disc{transform:scale(1.08)}
-.play-over svg{width:22px;height:22px;fill:var(--pitch);margin-left:3px}
+.play-over:hover .disc{transform:scale(1.09)}
+.play-over svg{width:26px;height:26px;fill:#fff;margin-left:4px}
 
-.title-block{margin-top:26px}
-h1{
-  font-family:var(--fd);font-weight:400;line-height:.86;letter-spacing:-.01em;
-  font-size:clamp(52px,13.5vw,116px);text-transform:uppercase;
+.poster-wrap{display:none;position:relative}
+@media(min-width:940px){.poster-wrap{display:block}}
+.poster-wrap img{width:100%;border-radius:2px}
+.poster-frame{padding:10px 10px 46px;background:#fff;box-shadow:var(--lift);transform:rotate(1.6deg)}
+.poster-frame .cap{
+  position:absolute;bottom:12px;left:0;right:0;text-align:center;
+  font-family:var(--fh);font-weight:700;font-size:21px;color:var(--ink-2)
 }
-h1 .l2{display:block;color:var(--sodium)}
+
+.title-block{margin-top:32px;position:relative}
+h1{margin:0;line-height:.8}
+h1 .l1{
+  display:block;font-family:var(--fh);font-weight:700;color:var(--pink);
+  font-size:clamp(56px,15vw,120px);transform:rotate(-2.5deg);
+  margin-left:.06em;text-shadow:2px 3px 0 rgba(255,255,255,.85)
+}
+h1 .l2{
+  display:block;font-family:var(--fd);font-weight:400;color:var(--grey);
+  font-size:clamp(52px,14.5vw,116px);text-transform:uppercase;letter-spacing:-.015em;
+  margin-top:-.16em;text-shadow:2px 2px 0 rgba(255,255,255,.6)
+}
+.tagline{
+  display:inline-block;margin-top:22px;background:var(--pink-2);
+  padding:12px 20px;transform:rotate(-1.6deg);box-shadow:0 3px 10px rgba(33,30,34,.13);
+  font-family:var(--fd);font-size:var(--t-lg);letter-spacing:.05em;
+  text-transform:uppercase;line-height:1.35;color:var(--torn)
+}
 .meta-strip{
-  display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:20px;padding-top:16px;
-  border-top:1px solid var(--line);
-  font-size:var(--t-xs);letter-spacing:.16em;text-transform:uppercase;color:var(--haze);
+  display:flex;flex-wrap:wrap;gap:7px 15px;margin-top:22px;
+  font-size:var(--t-xs);letter-spacing:.13em;text-transform:uppercase;
+  font-weight:500;color:var(--ink-2)
 }
-.logline{margin-top:20px;font-size:var(--t-lg);max-width:52ch;line-height:1.45}
-.hero-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.meta-strip span:not(:last-child)::after{content:' ·';margin-left:15px;opacity:.5}
+.logline{margin-top:20px;font-size:var(--t-lg);max-width:50ch;line-height:1.5}
+.hero-cta{display:flex;flex-wrap:wrap;gap:11px;margin-top:28px}
 
-/* ---- about ---- */
-.about-grid{display:grid;gap:32px}
-@media(min-width:820px){.about-grid{grid-template-columns:1.4fr .8fr;gap:56px}}
-.about-body p+p{margin-top:16px}
-.specs{border-top:1px solid var(--line)}
-.specs div{display:flex;justify-content:space-between;gap:18px;padding:11px 0;border-bottom:1px solid var(--line);font-size:var(--t-sm)}
-.specs dt{color:var(--haze);letter-spacing:.1em;text-transform:uppercase;font-size:var(--t-xs)}
+/* ---------- about ---------- */
+.about-grid{display:grid;gap:26px}
+@media(min-width:860px){.about-grid{grid-template-columns:1.45fr .8fr;gap:40px;align-items:start}}
+.about-body{padding:34px 30px}
+.about-body p+p{margin-top:15px}
+.specs{padding:30px 26px}
+.specs h3{font-family:var(--fh);font-weight:700;font-size:26px;color:var(--pink);margin-bottom:12px;transform:rotate(-2deg)}
+.specs div{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:var(--t-sm)}
+.specs div:last-child{border-bottom:0}
+.specs dt{color:var(--ink-2);font-weight:500}
+.specs dd{font-weight:700;text-align:right}
 
-/* ---- CAST / billing block (signature) ---- */
-.billing{border-top:1px solid var(--line-2)}
-.act{
-  display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:start;
-  padding:22px 0;border-bottom:1px solid var(--line);
+/* ---------- CAST: the polaroid wall ---------- */
+.wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(224px,1fr));gap:30px 22px}
+.pola{
+  background:#fff;padding:12px 12px 62px;box-shadow:var(--lift);position:relative;
+  transition:transform .25s var(--ease),box-shadow .25s
 }
-@media(min-width:760px){.act{grid-template-columns:92px 1fr auto;gap:24px;align-items:center}}
-.act-face{
-  width:64px;height:64px;border-radius:50%;object-fit:cover;
-  background:var(--slab);border:1px solid var(--line-2);
+.pola:nth-child(4n+1){transform:rotate(-2.2deg)}
+.pola:nth-child(4n+2){transform:rotate(1.5deg)}
+.pola:nth-child(4n+3){transform:rotate(-1deg)}
+.pola:nth-child(4n){transform:rotate(2.4deg)}
+.pola:hover{transform:rotate(0) translateY(-6px) scale(1.02);box-shadow:0 18px 36px rgba(33,30,34,.2);z-index:4}
+.pola-img{width:100%;aspect-ratio:1/1;object-fit:cover;background:var(--paper-2);display:block}
+.pola-name{
+  position:absolute;left:12px;right:12px;bottom:30px;text-align:center;
+  font-family:var(--fh);font-weight:700;font-size:23px;line-height:1;color:var(--ink)
 }
-@media(min-width:760px){.act-face{width:92px;height:92px;border-radius:3px}}
-.act-name{font-family:var(--fd);font-size:var(--t-xl);line-height:1;text-transform:uppercase;letter-spacing:.01em}
-@media(min-width:760px){.act-name{font-size:30px}}
-.act-role{font-size:var(--t-xs);letter-spacing:.18em;text-transform:uppercase;color:var(--sodium);margin-top:7px}
-.act-reach{font-size:var(--t-xs);color:var(--haze);margin-top:4px;letter-spacing:.06em}
-.socials{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.pola-role{
+  position:absolute;left:12px;right:12px;bottom:12px;text-align:center;
+  font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);font-weight:500
+}
+.pola-back{padding:2px 2px 0;display:flex;flex-direction:column;gap:9px;margin-top:11px}
+.socials{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
 .soc{
-  display:inline-flex;align-items:center;gap:6px;padding:10px 15px;min-height:40px;
-  border:1px solid var(--line);border-radius:100px;
-  font-size:var(--t-xs);letter-spacing:.1em;text-transform:uppercase;color:var(--haze);
-  transition:border-color .2s,color .2s
+  display:inline-flex;align-items:center;padding:8px 12px;min-height:38px;
+  border:1.5px solid var(--line);border-radius:100px;font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);transition:all .18s
 }
-.soc:hover{border-color:var(--sodium);color:var(--sodium)}
-.act-link{display:flex;gap:8px;margin-top:12px}
-@media(min-width:760px){.act-link{margin-top:0;flex-direction:column;align-items:flex-end}}
+.soc:hover{border-color:var(--pink);color:var(--pink);background:var(--pink-3)}
+.pola .reach{text-align:center;font-size:11px;color:var(--ink-2);letter-spacing:.05em}
+.cast-note{
+  font-family:var(--fh);font-weight:500;font-size:22px;color:var(--ink-2);
+  max-width:46ch;margin-bottom:26px;line-height:1.4;transform:rotate(-.7deg)
+}
 
-/* ---- reviews ---- */
+/* ---------- REVIEWS: sticky notes ---------- */
+.notes{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px}
+.note{
+  background:var(--pink-2);padding:22px 20px 18px;box-shadow:0 6px 16px rgba(33,30,34,.14);
+  position:relative;min-height:150px
+}
+.note:nth-child(3n+1){transform:rotate(-1.6deg);background:var(--pink-2)}
+.note:nth-child(3n+2){transform:rotate(1.2deg);background:#FBE9A8}
+.note:nth-child(3n){transform:rotate(-.6deg);background:#CFEAF6}
+.note p{font-family:var(--fh);font-weight:500;font-size:21px;line-height:1.32;color:var(--ink)}
+.note .who{
+  margin-top:14px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:700;color:var(--ink-2)
+}
+.note .when{font-size:10px;color:var(--ink-2);opacity:.75;letter-spacing:.05em}
+.stars{display:inline-flex;gap:2px;margin-bottom:9px}
+.stars svg{width:16px;height:16px;fill:rgba(33,30,34,.22)}
+.stars svg.on{fill:var(--pink)}
+.note:nth-child(3n+2) .stars svg.on,.note:nth-child(3n) .stars svg.on{fill:#E0559F}
 .rev-summary{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:26px}
-.rev-score{font-family:var(--fd);font-size:52px;line-height:1;color:var(--sodium)}
-.stars{display:inline-flex;gap:3px}
-.stars svg{width:15px;height:15px;fill:var(--slab-2)}
-.stars svg.on{fill:var(--sodium)}
-.rev-list{display:grid;gap:14px}
-@media(min-width:760px){.rev-list{grid-template-columns:1fr 1fr}}
-.rev{background:var(--slab);border:1px solid var(--line);border-radius:3px;padding:18px}
-.rev-top{display:flex;align-items:center;gap:10px;margin-bottom:9px}
-.rev-who{font-family:var(--fd);font-size:var(--t-sm);letter-spacing:.1em;text-transform:uppercase}
-.rev-when{margin-left:auto;font-size:var(--t-xs);color:var(--haze)}
-.rev p{font-size:var(--t-sm);line-height:1.55}
+.rev-score{font-family:var(--fd);font-size:56px;line-height:1;color:var(--pink)}
 .rate-pick{display:inline-flex;gap:2px;margin:-8px 0}
-.rate-pick button{background:none;border:0;cursor:pointer;padding:8px 6px;min-height:44px}
-.rate-pick svg{width:26px;height:26px;fill:var(--slab-2);transition:fill .15s}
-.rate-pick button.on svg{fill:var(--sodium)}
+.rate-pick button{background:none;border:0;cursor:pointer;padding:8px 5px;min-height:44px}
+.rate-pick svg{width:28px;height:28px;fill:rgba(33,30,34,.2);transition:fill .15s}
+.rate-pick button.on svg{fill:var(--pink)}
 
-/* ---- buy ---- */
-.tiers{display:grid;gap:14px}
-@media(min-width:820px){.tiers{grid-template-columns:repeat(3,1fr)}}
-.tier{
-  background:var(--slab);border:1px solid var(--line);border-radius:3px;
-  padding:24px;display:flex;flex-direction:column;position:relative;
-  transition:border-color .25s,transform .25s var(--ease)
-}
-.tier:hover{border-color:var(--line-2);transform:translateY(-2px)}
-.tier.feat{border-color:var(--sodium)}
-.tier.feat::before{
-  content:'Best value';position:absolute;top:-1px;right:16px;
-  background:var(--sodium);color:var(--pitch);padding:4px 10px;border-radius:0 0 3px 3px;
-  font-family:var(--fd);font-size:10px;letter-spacing:.18em;text-transform:uppercase
-}
-.tier h3{font-family:var(--fd);font-size:var(--t-xl);text-transform:uppercase;letter-spacing:.03em;font-weight:400}
-.tier .price{font-family:var(--fd);font-size:44px;line-height:1;margin:14px 0 4px}
-.tier .price small{font-family:var(--fb);font-size:var(--t-xs);color:var(--haze);letter-spacing:.14em;margin-left:5px}
-.tier ul{list-style:none;margin:16px 0 22px;display:grid;gap:9px}
-.tier li{font-size:var(--t-sm);color:var(--haze);display:flex;gap:9px;align-items:flex-start}
-.tier li::before{content:'—';color:var(--sodium);flex:none}
+/* ---------- GET IT ---------- */
+.tiers{display:grid;gap:20px}
+@media(min-width:860px){.tiers{grid-template-columns:repeat(3,1fr)}}
+.tier{padding:28px 24px;display:flex;flex-direction:column;position:relative;background:var(--paper-3)}
+.tier:nth-child(1){transform:rotate(-1deg)}
+.tier:nth-child(2){transform:rotate(.6deg);background:#fff}
+.tier:nth-child(3){transform:rotate(1.4deg)}
+.tier h3{font-family:var(--fd);font-size:var(--t-xl);text-transform:uppercase;font-weight:400;letter-spacing:.02em}
+.tier .price{font-family:var(--fd);font-size:50px;line-height:1;margin:12px 0 2px;color:var(--pink)}
+.tier .price small{font-family:var(--fb);font-size:var(--t-xs);color:var(--ink-2);letter-spacing:.11em;margin-left:6px;font-weight:500}
+.tier ul{list-style:none;margin:16px 0 24px;display:grid;gap:10px}
+.tier li{font-size:var(--t-sm);color:var(--ink-2);display:flex;gap:9px;align-items:flex-start;line-height:1.45}
+.tier li::before{content:'✓';color:var(--pink);font-weight:700;flex:none}
 .tier .btn{margin-top:auto;width:100%}
-
-/* ---- redeem + owned ---- */
-.panel{background:var(--slab);border:1px solid var(--line);border-radius:3px;padding:24px}
-.field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
-.field label{font-size:var(--t-xs);letter-spacing:.16em;text-transform:uppercase;color:var(--haze)}
-.field input,.field textarea,.field select{
-  background:var(--pitch);border:1px solid var(--line);border-radius:2px;
-  padding:13px;font-size:16px;font-weight:300;width:100%
+.best{
+  position:absolute;top:-16px;right:-8px;z-index:4;background:var(--pink);color:#fff;
+  font-family:var(--fh);font-weight:700;font-size:20px;padding:6px 15px;
+  transform:rotate(6deg);box-shadow:0 3px 9px rgba(33,30,34,.2);border-radius:2px
 }
-.field input:focus,.field textarea:focus{border-color:var(--sodium);outline:none}
-.row{display:grid;gap:14px}
-@media(min-width:620px){.row{grid-template-columns:1fr 1fr}}
+
+/* ---------- panels / owned ---------- */
+.panel{background:var(--paper-3);padding:26px 24px}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:15px}
+.field label{font-size:var(--t-xs);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-2);font-weight:700}
+.field input,.field textarea{
+  background:#fff;border:2px solid var(--line);border-radius:3px;
+  padding:13px;font-size:16px;width:100%;transition:border-color .18s
+}
+.field input:focus,.field textarea:focus{border-color:var(--pink);outline:none}
 .code-out{
-  font-family:var(--fd);font-size:26px;letter-spacing:.26em;color:var(--sodium);
-  background:var(--pitch);border:1px dashed var(--line-2);border-radius:3px;
-  padding:16px;text-align:center;margin:12px 0
+  font-family:var(--fd);font-size:30px;letter-spacing:.2em;color:var(--pink);
+  background:var(--pink-3);border:2px dashed var(--pink);border-radius:3px;
+  padding:18px;text-align:center;margin:14px 0
 }
 
-/* ---- sticky mobile buy bar ---- */
+/* ---------- sticky buy bar ---------- */
 .buybar{
-  position:fixed;left:0;right:0;bottom:0;z-index:70;
-  background:rgba(23,19,31,.94);backdrop-filter:blur(14px);
-  border-top:1px solid var(--line);padding:11px var(--gut);
-  padding-bottom:calc(11px + env(safe-area-inset-bottom));
+  position:fixed;left:0;right:0;bottom:0;z-index:70;background:var(--torn);
+  padding:11px var(--gut);padding-bottom:calc(11px + env(safe-area-inset-bottom));
   display:flex;align-items:center;gap:12px;
   transform:translateY(110%);transition:transform .35s var(--ease)
 }
 .buybar.up{transform:translateY(0)}
-.buybar .lab{font-size:var(--t-xs);color:var(--haze);letter-spacing:.12em;text-transform:uppercase;line-height:1.3}
-.buybar .lab b{display:block;font-family:var(--fd);font-size:var(--t-lg);color:var(--bone);letter-spacing:.04em}
+.buybar .lab{font-size:10px;color:rgba(237,231,221,.7);letter-spacing:.12em;text-transform:uppercase;line-height:1.3;font-weight:500}
+.buybar .lab b{display:block;font-family:var(--fd);font-size:var(--t-lg);color:var(--paper);letter-spacing:.03em}
 .buybar .btn{margin-left:auto}
-@media(min-width:900px){.buybar{display:none}}
+@media(min-width:940px){.buybar{display:none}}
 
-/* ---- footer ---- */
-footer{border-top:1px solid var(--line);padding:36px 0 96px;margin-top:20px}
-@media(min-width:900px){footer{padding-bottom:36px}}
-.foot{display:flex;flex-wrap:wrap;gap:18px;align-items:center;font-size:var(--t-xs);color:var(--haze);letter-spacing:.1em;text-transform:uppercase}
-.foot .pb{margin-left:auto;display:flex;align-items:center;gap:8px}
-.foot .pb b{font-family:var(--fd);color:var(--bone);letter-spacing:.14em}
+/* ---------- burger + mobile menu ---------- */
+.burger{
+  display:inline-flex;flex-direction:column;justify-content:center;gap:5px;
+  width:44px;height:44px;flex:none;padding:0 10px;margin-left:8px;
+  background:none;border:2px solid var(--torn);border-radius:3px;cursor:pointer
+}
+.burger span{display:block;height:2px;background:var(--torn);transition:transform .25s var(--ease),opacity .18s}
+.burger.on span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.on span:nth-child(2){opacity:0}
+.burger.on span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mnav{
+  position:absolute;left:0;right:0;top:100%;background:var(--paper-3);
+  border-bottom:2px solid var(--torn);max-height:0;overflow:hidden;
+  transition:max-height .3s var(--ease);box-shadow:0 12px 24px rgba(33,30,34,.12)
+}
+.mnav.open{max-height:460px}
+.mnav .in{padding:6px var(--gut) 22px}
+.mnav a{
+  display:block;padding:16px 0;border-bottom:1px dashed var(--line);
+  font-family:var(--fd);font-size:var(--t-lg);text-transform:uppercase;letter-spacing:.04em
+}
+.mnav a:last-of-type{border-bottom:0}
+.mnav .btn{width:100%;margin-top:12px}
+@media(min-width:880px){.burger,.mnav{display:none}}
 
-/* ---- modal ---- */
+/* ---------- footer ---------- */
+footer{border-top:2px solid var(--torn);padding:34px 0 96px;margin-top:26px}
+@media(min-width:940px){footer{padding-bottom:34px}}
+.foot{display:flex;flex-wrap:wrap;gap:16px;align-items:center;font-size:var(--t-xs);color:var(--ink-2);letter-spacing:.09em;text-transform:uppercase;font-weight:500}
+.foot .pb{margin-left:auto;display:flex;align-items:center;gap:7px}
+.foot .pb b{font-family:var(--fd);color:var(--torn);letter-spacing:.1em}
+
+/* ---------- modals ---------- */
 .scrim{
-  position:fixed;inset:0;z-index:100;background:rgba(13,10,19,.86);backdrop-filter:blur(8px);
+  position:fixed;inset:0;z-index:100;background:rgba(27,24,28,.72);backdrop-filter:blur(6px);
   display:flex;align-items:center;justify-content:center;padding:var(--gut);
   opacity:0;pointer-events:none;transition:opacity .25s
 }
 .scrim.open{opacity:1;pointer-events:auto}
 .modal{
-  background:var(--ink);border:1px solid var(--line-2);border-radius:4px;
-  width:100%;max-width:440px;max-height:88dvh;overflow:auto;overscroll-behavior:contain;padding:28px
+  background:var(--paper-3);width:100%;max-width:440px;max-height:88dvh;
+  overflow:auto;overscroll-behavior:contain;padding:30px 26px;
+  box-shadow:0 22px 50px rgba(0,0,0,.34);position:relative
 }
-.modal.wide{max-width:960px;padding:0;background:var(--pitch);border-radius:4px;overflow:hidden}
-.modal h3{font-family:var(--fd);font-size:var(--t-xl);text-transform:uppercase;letter-spacing:.03em;font-weight:400;margin-bottom:6px}
-.modal .x{position:absolute;top:12px;right:12px;z-index:5;background:rgba(13,10,19,.8);border:1px solid var(--line);border-radius:50%;width:44px;height:44px;cursor:pointer;font-size:20px;line-height:1}
-.tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin:16px 0 20px}
-.tabs button{flex:1;background:none;border:0;border-bottom:2px solid transparent;padding:15px 0;min-height:48px;cursor:pointer;font-family:var(--fd);font-size:var(--t-sm);letter-spacing:.14em;text-transform:uppercase;color:var(--haze)}
-.tabs button.on{color:var(--bone);border-bottom-color:var(--sodium)}
-.note{font-size:var(--t-xs);color:var(--haze);margin-top:12px;line-height:1.5}
-.err{color:#FF7A6E;font-size:var(--t-sm);margin-top:10px;min-height:1.2em}
-.ok{color:#7ED9A8}
+.modal.wide{max-width:980px;padding:12px;background:var(--paper-3)}
+.modal h3{font-family:var(--fd);font-size:var(--t-xl);text-transform:uppercase;font-weight:400;letter-spacing:.02em;margin-bottom:5px}
+.modal .x{
+  position:absolute;top:10px;right:10px;z-index:5;background:var(--paper);
+  border:2px solid var(--torn);border-radius:50%;width:44px;height:44px;
+  cursor:pointer;font-size:20px;line-height:1;font-weight:700
+}
+.tabs{display:flex;border-bottom:2px solid var(--line);margin:18px 0 20px}
+.tabs button{
+  flex:1;background:none;border:0;border-bottom:3px solid transparent;padding:15px 0;min-height:48px;
+  cursor:pointer;font-family:var(--fb);font-weight:700;font-size:var(--t-sm);
+  letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);margin-bottom:-2px
+}
+.tabs button.on{color:var(--pink);border-bottom-color:var(--pink)}
+.note-sm{font-size:var(--t-xs);color:var(--ink-2);margin-top:12px;line-height:1.5}
+.err{color:#C22E4E;font-size:var(--t-sm);margin-top:10px;min-height:1.2em;font-weight:500}
+.ok{color:#1E8A5F}
 
-/* toast */
 .toast{
   position:fixed;left:50%;bottom:88px;transform:translate(-50%,20px);z-index:120;
-  background:var(--sodium);color:var(--pitch);padding:11px 20px;border-radius:100px;
-  font-family:var(--fd);font-size:var(--t-xs);letter-spacing:.14em;text-transform:uppercase;
+  background:var(--torn);color:var(--paper);padding:13px 22px;border-radius:100px;
+  font-weight:700;font-size:var(--t-xs);letter-spacing:.1em;text-transform:uppercase;
   opacity:0;pointer-events:none;transition:opacity .25s,transform .25s var(--ease)
 }
 .toast.up{opacity:1;transform:translate(-50%,0)}
 
-.skel{background:linear-gradient(90deg,var(--slab),var(--slab-2),var(--slab));background-size:200% 100%;animation:sh 1.4s infinite;border-radius:3px}
-@keyframes sh{to{background-position:-200% 0}}
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+/* doodles */
+.doodle{position:absolute;pointer-events:none;opacity:.5;z-index:0}
+.doodle svg{stroke:var(--ink);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .reveal.in{opacity:1;transform:none}
-
-/* ---- phones ---- */
-@media(max-width:700px){
-  :root{--gut:18px}
-  section{padding:44px 0}
-  .hero{padding:22px 0 4px}
-  h1{font-size:clamp(46px,13vw,72px);overflow-wrap:anywhere}
-  .logline{font-size:16px}
-  .sec-head{gap:10px;margin-bottom:22px}
-  .sec-head h2{font-size:28px}
-  .sec-head .count{width:100%;margin-left:0;order:3}
-
-  /* tiers: trim the height so all three are reachable without a marathon scroll */
-  .tier{padding:20px}
-  .tier .price{font-size:34px;margin:10px 0 2px}
-  .tier ul{margin:12px 0 18px;gap:7px}
-  .tier li{font-size:13px}
-
-  .act{padding:18px 0;gap:14px}
-  .act-link{margin-top:14px}
-  .act-link .btn{width:100%}
-
-  .rev-top{flex-wrap:wrap;gap:7px}
-  .rev-when{margin-left:0;width:100%}
-
-  .modal{padding:22px 18px}
-  .modal.wide{max-width:100%}
-  .code-out{font-size:20px;letter-spacing:.16em;padding:14px}
-  .panel{padding:20px}
-  .foot{font-size:10px;gap:12px}
-  .foot .pb{margin-left:0;width:100%}
-}
-
-/* the on-screen keyboard leaves very little room in landscape */
-@media(max-height:520px) and (orientation:landscape){
-  .modal{max-height:94dvh;padding:18px}
-  .buybar{display:none}
-}
-
 @media(prefers-reduced-motion:reduce){
   *{animation-duration:.01ms !important;transition-duration:.01ms !important}
   html{scroll-behavior:auto}
   .reveal{opacity:1;transform:none}
+}
+
+/* ---------- phones ---------- */
+@media(max-width:700px){
+  :root{--gut:18px}
+  section{padding:46px 0}
+  .hero{padding:22px 0 4px}
+  h1 .l1{font-size:clamp(50px,14.5vw,80px)}
+  h1 .l2{font-size:clamp(46px,14vw,76px)}
+  .tagline{font-size:var(--t-sm);padding:10px 16px}
+  .sec-head h2{font-size:28px}
+  .sec-head .kick{font-size:22px}
+  .about-body,.specs{padding:26px 22px}
+  .wall{grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:22px 14px}
+  .pola{padding:9px 9px 52px}
+  .pola-name{font-size:19px;bottom:26px}
+  .tier{padding:24px 20px}
+  .tier .price{font-size:40px}
+  .notes{grid-template-columns:1fr}
+  .modal{padding:26px 20px}
+  .modal.wide{padding:8px}
+  .code-out{font-size:23px;letter-spacing:.13em}
+  .foot{font-size:10px;gap:12px}
+  .foot .pb{margin-left:0;width:100%}
+}
+@media(max-height:520px) and (orientation:landscape){
+  .modal{max-height:94dvh;padding:18px}
+  .buybar{display:none}
 }
 </style>
 </head>
@@ -382,16 +459,14 @@ footer{border-top:1px solid var(--line);padding:36px 0 96px;margin-top:20px}
 <!-- ===================== NAV ===================== -->
 <nav class="nav" id="nav">
   <div class="wrap">
-    <a class="mark" href="#top">Destroying<span>.</span>Desmond</a>
+    <a class="mark" href="#top"><span class="a">Destroying</span><span class="b">Desmond</span></a>
     <div class="links">
       <a href="#film">The film</a>
       <a href="#cast">Cast</a>
       <a href="#reviews">Reviews</a>
       <a href="#get">Get it</a>
     </div>
-    <div class="acct">
-      <button class="btn btn-sm btn-ghost" id="acctBtn">Sign in</button>
-    </div>
+    <div class="acct"><button class="btn btn-sm" id="acctBtn">Sign in</button></div>
     <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mnav">
       <span></span><span></span><span></span>
     </button>
@@ -410,26 +485,35 @@ footer{border-top:1px solid var(--line);padding:36px 0 96px;margin-top:20px}
 <!-- ===================== HERO ===================== -->
 <header class="hero" id="top">
   <div class="wrap hero-grid">
-    <div class="poster"><img id="posterImg" alt="Destroying Desmond poster" loading="lazy"></div>
     <div>
-      <div class="player-well">
-        <span class="trailer-badge">Trailer · free</span>
-        <div id="trailerMount"></div>
-        <button class="play-over" id="trailerPlay" aria-label="Play trailer">
-          <span class="disc"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
-        </button>
+      <div class="player-frame tilt-l">
+        <span class="trailer-flag">Trailer — free</span>
+        <div class="player-well">
+          <div id="trailerMount"></div>
+          <button class="play-over" id="trailerPlay" aria-label="Play trailer">
+            <span class="disc"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>
+          </button>
+        </div>
       </div>
 
       <div class="title-block">
-        <h1>Destroying<span class="l2">Desmond</span></h1>
+        <h1><span class="l1">Destroying</span><span class="l2">Desmond</span></h1>
+        <div class="tagline">Three exes.<br>One curse. Zero chill.</div>
         <div class="meta-strip" id="metaStrip">
           <span>Feature film</span><span id="mRuntime"></span><span>South Africa</span><span id="mYear"></span>
         </div>
         <p class="logline" id="logline"></p>
         <div class="hero-cta">
           <button class="btn btn-fill" id="heroBuy">Watch the film</button>
-          <a class="btn btn-ghost" href="#cast">Meet the cast</a>
+          <a class="btn" href="#cast">Meet the cast</a>
         </div>
+      </div>
+    </div>
+
+    <div class="poster-wrap">
+      <div class="poster-frame">
+        <img id="posterImg" alt="Destroying Desmond poster" loading="lazy">
+        <span class="cap">on now</span>
       </div>
     </div>
   </div>
@@ -438,26 +522,29 @@ footer{border-top:1px solid var(--line);padding:36px 0 96px;margin-top:20px}
 <!-- ===================== ABOUT ===================== -->
 <section id="film">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">01</span><h2>The film</h2></div>
+    <div class="sec-head"><span class="kick">what's it</span><h2>About the film</h2></div>
     <div class="about-grid reveal">
-      <div class="about-body" id="synopsis"></div>
-      <dl class="specs" id="specs"></dl>
+      <div class="about-body torn tilt-l" id="synopsis"></div>
+      <dl class="specs torn torn-2 tilt-r">
+        <h3>The credits</h3>
+        <div id="specsList"></div>
+      </dl>
     </div>
   </div>
 </section>
 
-<!-- ===================== CAST — the billing block ===================== -->
+<!-- ===================== CAST ===================== -->
 <section id="cast">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">02</span><h2>Cast</h2>
+      <span class="kick">the accused</span><h2>Cast</h2>
       <span class="count" id="castCount"></span>
     </div>
-    <p class="muted" style="max-width:56ch;margin-bottom:24px">
-      Every name here carries its own link. Tap <em>Copy link</em> to grab a version of this
-      page tagged to that actor — every view and every sale through it gets counted to them.
+    <p class="cast-note">
+      Every face here has its own link. Tap <b>copy link</b> to grab a version of this page
+      tagged to them — every view and every sale through it gets counted to them.
     </p>
-    <div class="billing" id="castList"></div>
+    <div class="wall" id="castList"></div>
   </div>
 </section>
 
@@ -465,25 +552,25 @@ footer{border-top:1px solid var(--line);padding:36px 0 96px;margin-top:20px}
 <section id="reviews">
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow">03</span><h2>What people said</h2>
+      <span class="kick">receipts</span><h2>What people said</h2>
       <span class="count" id="revCount"></span>
     </div>
     <div class="rev-summary" id="revSummary"></div>
-    <div class="rev-list" id="revList"></div>
-    <div style="margin-top:22px" id="revCta"></div>
+    <div class="notes" id="revList"></div>
+    <div style="margin-top:26px" id="revCta"></div>
   </div>
 </section>
 
 <!-- ===================== GET IT ===================== -->
 <section id="get">
   <div class="wrap">
-    <div class="sec-head"><span class="eyebrow">04</span><h2>Get it</h2></div>
-    <div id="ownedPanel" class="hide" style="margin-bottom:20px"></div>
+    <div class="sec-head"><span class="kick">no spoilers</span><h2>Get it</h2></div>
+    <div id="ownedPanel" class="hide" style="margin-bottom:24px"></div>
     <div class="tiers" id="tiers"></div>
 
-    <div class="panel" style="margin-top:32px;max-width:560px">
-      <h3 style="font-size:var(--t-lg)">Got a gift code?</h3>
-      <p class="muted" style="font-size:var(--t-sm);margin-bottom:14px">Someone bought this for you. Enter the code to unlock it.</p>
+    <div class="panel torn tilt-r" style="margin-top:40px;max-width:560px">
+      <h3 style="font-family:var(--fh);font-weight:700;font-size:28px;color:var(--pink);transform:rotate(-2deg)">Got a gift code?</h3>
+      <p style="font-size:var(--t-sm);color:var(--ink-2);margin:6px 0 16px">Someone bought this for you. Type it in.</p>
       <div class="field"><label for="giftCode">Gift code</label><input id="giftCode" placeholder="DD-XXXXXX" autocomplete="off"></div>
       <button class="btn btn-fill" id="redeemBtn">Unlock the film</button>
       <div class="err" id="redeemErr"></div>
@@ -499,7 +586,6 @@ footer{border-top:1px solid var(--line);padding:36px 0 96px;margin-top:20px}
   </div>
 </footer>
 
-<!-- sticky mobile buy bar -->
 <div class="buybar" id="buybar">
   <div class="lab">Stream from<b id="barPrice">R—</b></div>
   <button class="btn btn-fill btn-sm" id="barBuy">Watch now</button>
@@ -509,67 +595,66 @@ footer{border-top:1px solid var(--line);padding:36px 0 96px;margin-top:20px}
 
 <!-- ===================== MODALS ===================== -->
 <div class="scrim" id="authScrim">
-  <div class="modal" style="position:relative">
+  <div class="modal">
     <button class="x" data-close aria-label="Close">×</button>
     <h3 id="authTitle">Sign in</h3>
-    <p class="muted" style="font-size:var(--t-sm)">You need an account so your film stays with you.</p>
+    <p style="font-size:var(--t-sm);color:var(--ink-2)">You need an account so the film stays with you.</p>
     <div class="tabs"><button class="on" data-mode="in">Sign in</button><button data-mode="up">Create account</button></div>
     <div class="field" id="nameField" style="display:none"><label for="auName">Name</label><input id="auName" autocomplete="name"></div>
     <div class="field"><label for="auEmail">Email</label><input id="auEmail" type="email" autocomplete="email"></div>
     <div class="field"><label for="auPass">Password</label><input id="auPass" type="password" autocomplete="current-password"></div>
     <button class="btn btn-fill" id="authGo" style="width:100%">Sign in</button>
     <div class="err" id="authErr"></div>
-    <button class="btn btn-ghost btn-sm" id="resetPw" style="width:100%;margin-top:10px;border:0;color:var(--haze)">Forgot password</button>
+    <button class="btn btn-sm" id="resetPw" style="width:100%;margin-top:10px;border:0;color:var(--ink-2)">Forgot password</button>
   </div>
 </div>
 
 <div class="scrim" id="buyScrim">
-  <div class="modal" style="position:relative">
+  <div class="modal">
     <button class="x" data-close aria-label="Close">×</button>
     <h3 id="buyTitle">Checkout</h3>
-    <p class="muted" style="font-size:var(--t-sm)" id="buySub"></p>
+    <p style="font-size:var(--t-sm);color:var(--ink-2)" id="buySub"></p>
     <div id="giftFields" class="hide" style="margin-top:18px">
       <div class="field"><label for="gName">Who's it for</label><input id="gName" placeholder="Their name"></div>
       <div class="field"><label for="gMsg">Message (optional)</label><textarea id="gMsg" rows="3" placeholder="Watch this, then call me."></textarea></div>
-      <p class="note">You'll get a code to send them however you like — WhatsApp, DM, in person.</p>
+      <p class="note-sm">You'll get a code to send them however you like — WhatsApp, DM, in person.</p>
     </div>
     <button class="btn btn-fill" id="payGo" style="width:100%;margin-top:20px">Pay with PayFast</button>
     <div class="err" id="buyErr"></div>
-    <p class="note">Card, Instant EFT, SnapScan and more via PayFast. Filmmakers keep 70%.</p>
+    <p class="note-sm">Card, Instant EFT, SnapScan and more via PayFast.</p>
   </div>
 </div>
 
 <div class="scrim" id="watchScrim">
-  <div class="modal wide" style="position:relative">
+  <div class="modal wide">
     <button class="x" data-close aria-label="Close">×</button>
     <div style="aspect-ratio:16/9;background:#000"><video id="feature" controls playsinline controlsList="nodownload" style="width:100%;height:100%"></video></div>
   </div>
 </div>
 
 <div class="scrim" id="revScrim">
-  <div class="modal" style="position:relative">
+  <div class="modal">
     <button class="x" data-close aria-label="Close">×</button>
     <h3>Write a review</h3>
-    <p class="muted" style="font-size:var(--t-sm);margin-bottom:16px">Only people who've watched it can post.</p>
+    <p style="font-size:var(--t-sm);color:var(--ink-2);margin-bottom:16px">Only people who've watched it can post.</p>
     <div class="field"><label>Your rating</label><div class="rate-pick" id="ratePick"></div></div>
     <div class="field"><label for="revBody">Your review</label><textarea id="revBody" rows="4" maxlength="600" placeholder="No spoilers."></textarea></div>
     <button class="btn btn-fill" id="revGo" style="width:100%">Post review</button>
     <div class="err" id="revErr"></div>
-    <p class="note">Reviews appear once approved.</p>
+    <p class="note-sm">Reviews appear once approved.</p>
   </div>
 </div>
 
 <div class="scrim" id="codeScrim">
-  <div class="modal" style="position:relative">
+  <div class="modal">
     <button class="x" data-close aria-label="Close">×</button>
     <h3>Your gift code</h3>
-    <p class="muted" style="font-size:var(--t-sm)">Send this to them. It unlocks one permanent copy.</p>
+    <p style="font-size:var(--t-sm);color:var(--ink-2)">Send this to them. It unlocks one permanent copy.</p>
     <div class="code-out" id="codeOut">—</div>
     <button class="btn btn-fill" id="codeShare" style="width:100%">Share it</button>
   </div>
 </div>
 
-<!-- ===================== FIREBASE ===================== -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
@@ -683,7 +768,7 @@ async function loadFilm() {
     .split(/\n{2,}/).filter(Boolean).map(p => `<p>${esc(p)}</p>`).join('');
 
   const specs = FILM.credits || {};
-  $('#specs').innerHTML = Object.entries(specs)
+  $('#specsList').innerHTML = Object.entries(specs)
     .map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('');
 
   mountTrailer();
@@ -721,20 +806,18 @@ async function loadCast() {
   const SOC = { instagram: 'Instagram', tiktok: 'TikTok', x: 'X', youtube: 'YouTube', facebook: 'Facebook' };
 
   $('#castList').innerHTML = CAST.map(c => `
-    <div class="act">
-      <img class="act-face" src="${esc(c.photoUrl || '')}" alt="${esc(c.name)}" loading="lazy">
-      <div>
-        <div class="act-name">${esc(c.name)}</div>
-        <div class="act-role">${esc(c.role || '')}</div>
-        ${c.reach ? `<div class="act-reach">${esc(c.reach)} followers</div>` : ''}
+    <div class="pola">
+      <img class="pola-img" src="${esc(c.photoUrl || '')}" alt="${esc(c.name)}" loading="lazy">
+      <div class="pola-back">
+        ${c.reach ? `<div class="reach">${esc(c.reach)} following</div>` : ''}
         <div class="socials">
           ${Object.keys(SOC).filter(k => c[k]).map(k =>
             `<a class="soc" href="${esc(c[k])}" target="_blank" rel="noopener">${SOC[k]}</a>`).join('')}
         </div>
+        <button class="btn btn-sm" data-copy="${esc(c.slug)}" style="width:100%">Copy link</button>
       </div>
-      <div class="act-link">
-        <button class="btn btn-sm btn-ghost" data-copy="${esc(c.slug)}">Copy link</button>
-      </div>
+      <div class="pola-name">${esc(c.name)}</div>
+      <div class="pola-role">${esc(c.role || '')}</div>
     </div>`).join('');
 
   $$('[data-copy]').forEach(b => b.onclick = () => {
@@ -750,27 +833,28 @@ function renderTiers() {
   const s = FILM.priceStream ?? 35, o = FILM.priceOwn ?? 89, g = FILM.priceGift ?? o;
   const win = FILM.streamHours ?? 48;
   $('#tiers').innerHTML = `
-    <div class="tier">
+    <div class="tier torn">
       <h3>Stream</h3>
       <div class="price">${rands(s)}<small>once off</small></div>
       <ul>
         <li>${win} hours from the moment you press play</li>
-        <li>Watch on any device, as many times as you like in the window</li>
+        <li>Any device, as many times as you like in the window</li>
         <li>Full HD</li>
       </ul>
-      <button class="btn btn-ghost" data-tier="stream">Stream it</button>
+      <button class="btn" data-tier="stream">Stream it</button>
     </div>
-    <div class="tier feat">
+    <div class="tier torn torn-2">
+      <span class="best">best value</span>
       <h3>Own</h3>
       <div class="price">${rands(o)}<small>forever</small></div>
       <ul>
         <li>Keep it — no expiry</li>
-        <li>Download the file to your phone or laptop</li>
+        <li>Download it to your phone or laptop</li>
         <li>Full HD, plus the behind-the-scenes cut</li>
       </ul>
       <button class="btn btn-fill" data-tier="own">Own it</button>
     </div>
-    <div class="tier">
+    <div class="tier torn">
       <h3>Gift</h3>
       <div class="price">${rands(g)}<small>for a friend</small></div>
       <ul>
@@ -778,7 +862,7 @@ function renderTiers() {
         <li>They get a permanent copy</li>
         <li>Add a message</li>
       </ul>
-      <button class="btn btn-ghost" data-tier="gift">Send it</button>
+      <button class="btn" data-tier="gift">Send it</button>
     </div>`;
   $$('[data-tier]').forEach(b => b.onclick = () => startBuy(b.dataset.tier));
 }
@@ -871,15 +955,15 @@ function renderOwned(p) {
   const perm = p.type !== 'stream';
   const left = p.expiresAt ? Math.max(0, Math.round((p.expiresAt - Date.now()) / 36e5)) : null;
   $('#ownedPanel').innerHTML = `
-    <div class="panel" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;border-color:var(--sodium)">
+    <div class="panel torn tilt-l" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;background:var(--pink-3)">
       <div>
-        <div class="eyebrow">${perm ? 'Yours to keep' : 'Rental active'}</div>
-        <div style="font-family:var(--fd);font-size:var(--t-xl);text-transform:uppercase;margin-top:5px">Destroying Desmond</div>
-        ${!perm ? `<div class="muted" style="font-size:var(--t-sm)">${left === null ? 'Starts when you press play' : left + ' hours left'}</div>` : ''}
+        <div style="font-family:var(--fh);font-weight:700;font-size:26px;color:var(--pink);transform:rotate(-2deg)">${perm ? "It's yours" : 'Rental running'}</div>
+        <div style="font-family:var(--fd);font-size:var(--t-xl);text-transform:uppercase;margin-top:4px">Destroying Desmond</div>
+        ${!perm ? `<div style="font-size:var(--t-sm);color:var(--ink-2)">${left === null ? 'Clock starts when you press play' : left + ' hours left'}</div>` : ''}
       </div>
       <div style="margin-left:auto;display:flex;gap:10px;flex-wrap:wrap">
         <button class="btn btn-fill" id="playBtn">Play</button>
-        ${perm ? '<button class="btn btn-ghost" id="dlBtn">Download</button>' : ''}
+        ${perm ? '<button class="btn" id="dlBtn">Download</button>' : ''}
       </div>
     </div>`;
   $('#ownedPanel').classList.remove('hide');
@@ -889,9 +973,9 @@ function renderOwned(p) {
 
 function renderExpired() {
   $('#ownedPanel').innerHTML = `
-    <div class="panel">
-      <div class="eyebrow">Rental ended</div>
-      <p class="muted" style="font-size:var(--t-sm);margin-top:6px">Your ${FILM.streamHours ?? 48}-hour window has closed. Stream it again, or own it outright.</p>
+    <div class="panel torn tilt-r">
+      <div style="font-family:var(--fh);font-weight:700;font-size:26px;color:var(--pink)">Rental ended</div>
+      <p style="font-size:var(--t-sm);color:var(--ink-2);margin-top:6px">Your ${FILM.streamHours ?? 48}-hour window has closed. Stream it again, or own it outright.</p>
     </div>`;
   $('#ownedPanel').classList.remove('hide');
 }
@@ -1058,21 +1142,19 @@ async function loadReviews() {
 
   if (!list.length) {
     $('#revSummary').innerHTML = '';
-    $('#revList').innerHTML = '<p class="muted">No reviews yet. Watch it and be the first.</p>';
+    $('#revList').innerHTML = '<p style="color:var(--ink-2)">No reviews yet. Watch it and be the first.</p>';
     return;
   }
   const avg = list.reduce((s, r) => s + (r.rating || 0), 0) / list.length;
   $('#revSummary').innerHTML =
     `<div class="rev-score">${avg.toFixed(1)}</div>
-     <div>${stars(avg)}<div class="muted" style="font-size:var(--t-xs);letter-spacing:.14em;text-transform:uppercase;margin-top:5px">from ${list.length} viewer${list.length > 1 ? 's' : ''}</div></div>`;
+     <div>${stars(avg)}<div style="font-size:var(--t-xs);letter-spacing:.13em;text-transform:uppercase;margin-top:5px;color:var(--ink-2);font-weight:500">from ${list.length} viewer${list.length > 1 ? 's' : ''}</div></div>`;
   $('#revList').innerHTML = list.map(r => `
-    <div class="rev">
-      <div class="rev-top">
-        <span class="rev-who">${esc(r.name || 'Viewer')}</span>
-        ${stars(r.rating)}
-        <span class="rev-when">${when(r.createdAt)}</span>
-      </div>
+    <div class="note">
+      ${stars(r.rating)}
       <p>${esc(r.body)}</p>
+      <div class="who">${esc(r.name || 'Viewer')}</div>
+      <div class="when">${when(r.createdAt)}</div>
     </div>`).join('');
 }
 
@@ -1084,9 +1166,9 @@ function when(ts) {
 
 function renderReviewCta() {
   const el = $('#revCta');
-  if (!USER) { el.innerHTML = '<p class="muted" style="font-size:var(--t-sm)">Watched it? Sign in to leave a review.</p>'; return; }
-  if (!ACCESS) { el.innerHTML = '<p class="muted" style="font-size:var(--t-sm)">Reviews are open to anyone who has watched the film.</p>'; return; }
-  el.innerHTML = '<button class="btn btn-ghost" id="openRev">Write a review</button>';
+  if (!USER) { el.innerHTML = '<p style="font-size:var(--t-sm);color:var(--ink-2)">Watched it? Sign in to leave a review.</p>'; return; }
+  if (!ACCESS) { el.innerHTML = '<p style="font-size:var(--t-sm);color:var(--ink-2)">Reviews are open to anyone who has watched the film.</p>'; return; }
+  el.innerHTML = '<button class="btn" id="openRev">Write a review</button>';
   $('#openRev').onclick = () => { drawRate(0); openM('#revScrim'); };
 }
 
