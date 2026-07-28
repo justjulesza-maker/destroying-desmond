@@ -49,14 +49,20 @@ async function verify(token) {
 }
 
 /* ---------- PayFast signature ---------- */
+/* PayFast's backend uses PHP urlencode(). encodeURIComponent leaves
+   ! ' ( ) * ~ untouched; PHP escapes them. Spaces become '+' in both. */
+function pfEncode(v) {
+  return encodeURIComponent(String(v))
+    .replace(/%20/g, '+')
+    .replace(/[!'()*~]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase());
+}
+
 function sign(fields, passphrase) {
   const qs = Object.entries(fields)
     .filter(([, v]) => v !== '' && v !== null && v !== undefined)
-    .map(([k, v]) => `${k}=${encodeURIComponent(String(v).trim()).replace(/%20/g, '+')}`)
+    .map(([k, v]) => `${k}=${pfEncode(v)}`)
     .join('&');
-  const full = passphrase
-    ? `${qs}&passphrase=${encodeURIComponent(passphrase.trim()).replace(/%20/g, '+')}`
-    : qs;
+  const full = passphrase ? `${qs}&passphrase=${pfEncode(passphrase.trim())}` : qs;
   return crypto.createHash('md5').update(full).digest('hex');
 }
 
@@ -93,6 +99,11 @@ exports.handler = async event => {
         env: {
           PAYFAST_MERCHANT_ID:  process.env.PAYFAST_MERCHANT_ID  || 'MISSING',
           PAYFAST_MERCHANT_KEY: process.env.PAYFAST_MERCHANT_KEY || 'MISSING',
+          whitespace_check: (() => {
+            const bad = ['PAYFAST_MERCHANT_ID','PAYFAST_MERCHANT_KEY','PAYFAST_PASSPHRASE']
+              .filter(k => process.env[k] && process.env[k] !== process.env[k].trim());
+            return bad.length ? 'STRAY WHITESPACE ON: ' + bad.join(', ') : 'all clean';
+          })(),
           PAYFAST_SANDBOX:      process.env.PAYFAST_SANDBOX      || 'MISSING',
           PAYFAST_PASSPHRASE_set: pass === undefined ? 'NOT SET (good, if PayFast has none)'
                                  : `SET, length ${pass.length}`,
@@ -148,10 +159,13 @@ exports.handler = async event => {
       custom_str4:  filmId
     };
 
-    // PayFast signs exactly what it receives, so drop empty fields from the payload
-    // BEFORE signing. Submitting a field we didn't sign is a guaranteed mismatch.
+    // Normalise BEFORE signing so the bytes we sign are exactly the bytes we post.
+    // A stray space on an env var (very easy to paste in) otherwise means we sign
+    // the trimmed value and submit the untrimmed one -> guaranteed mismatch.
     for (const k of Object.keys(fields)) {
-      if (fields[k] === '' || fields[k] === null || fields[k] === undefined) delete fields[k];
+      if (fields[k] === '' || fields[k] === null || fields[k] === undefined) { delete fields[k]; continue; }
+      fields[k] = String(fields[k]).trim();
+      if (fields[k] === '') delete fields[k];
     }
 
     fields.signature = sign(fields, process.env.PAYFAST_PASSPHRASE);
